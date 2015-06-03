@@ -19,10 +19,11 @@ extension OTMClient {
             if success {
                 self.sessionID = sessionID
                 println("auth session id \(self.sessionID)")
-                // then get the user data
+                // then get the user data using the session id (user_id)
                 self.getPublicUserData({ (success, result, errorString) -> Void in
                     if success {
                         println("success got user data \(result)")
+                        completionHandler(success: success, errorString: errorString)
                     } else {
                         completionHandler(success: success, errorString: errorString)
                     }
@@ -78,14 +79,18 @@ extension OTMClient {
         taskForGETMethod(Constants.ParseBaseURL, method: Methods.StudentLocations, parameters: parameters, requestValues: requestValues) { (result, error) -> Void in
             if let error = error {
                 // there was an error in the request
+                println("GET student locations: didn't get the json")
                 completionHandler(result: nil, error: error)
             } else {
                 // got the json result
+                println("GET student locations: got the json")
                 if let results = result.valueForKey(JSONResponseKeys.Results) as? [[String: AnyObject]] {
                     // parsed the json result
                     completionHandler(result: results, error: nil)
+                    println("student locations: got the result \(results)")
                 } else {
                     // couldn't parse the json result
+                    println("GET student locations: couldn't parse results")
                     completionHandler(result: nil, error: NSError(domain: "student locations parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Couldn't parse student locations"]))
                 }
             }
@@ -231,7 +236,7 @@ extension OTMClient {
         
         // setup the json body
         // user account, from input
-        let accountDictionary : [String: String] = ["username": "kelv17@gmail.com", "password": "2target1"]
+        let accountDictionary : [String: String] = ["username": self.email!, "password": self.pass!]
         let jsonBody : [String: AnyObject] = ["udacity": accountDictionary]
         
         // make the request

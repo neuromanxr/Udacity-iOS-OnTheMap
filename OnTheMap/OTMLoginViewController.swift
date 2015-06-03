@@ -7,6 +7,12 @@
 //
 
 import UIKit
+import FBSDKCoreKit
+import FBSDKLoginKit
+
+protocol LoginViewControllerDelegate {
+    func didLoggedIn(status: Bool)
+}
 
 class OTMLoginViewController: UIViewController {
 
@@ -14,11 +20,34 @@ class OTMLoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var facebookLoginButton: FBSDKLoginButton!
+    
+    let facebookDelegate = OTMFacebookDelegate()
+    let loginTextFieldDelegate = OTMLoginTextFieldDelegate()
+    
+    var delegate: LoginViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
+        
+        // set up the delegates
+        facebookLoginButton.delegate = facebookDelegate
+        emailTextField.delegate = loginTextFieldDelegate
+        passwordTextField.delegate = loginTextFieldDelegate
+        
+        // assign tags to text fields
+        emailTextField.tag = textFieldType.email.rawValue
+        passwordTextField.tag = textFieldType.password.rawValue
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if (FBSDKAccessToken.currentAccessToken() != nil) {
+            println("There's a current access token \(FBSDKAccessToken.currentAccessToken().tokenString)")
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,6 +56,19 @@ class OTMLoginViewController: UIViewController {
     }
     
     @IBAction func loginAction(sender: UIButton) {
+        
+        emailTextField.text.isEmpty
+        OTMClient.sharedInstance().authenticateWithViewController(self, completionHandler: { (success, errorString) -> Void in
+            if success {
+                println("login success")
+                // tell map view we are logged in, so load the student locations
+                self.delegate?.didLoggedIn(true)
+                
+                self.dismissViewControllerAnimated(true, completion: nil)
+            } else {
+                println("login error \(errorString)")
+            }
+        })
     }
 
     @IBAction func signUpAction(sender: UIButton) {

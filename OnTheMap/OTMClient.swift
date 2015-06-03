@@ -16,6 +16,9 @@ class OTMClient: NSObject {
     // authentication state
     var sessionID: String? = nil
     
+    var email: String? = nil
+    var pass: String? = nil
+    
     // initialize shared NSURL session
     override init() {
         session = NSURLSession.sharedSession()
@@ -57,11 +60,19 @@ class OTMClient: NSObject {
                 println("GET response: \(response)")
                 completionHandler(result: nil, error: newError)
             } else {
-                // skip the first 5 characters in response!
-                let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
-                // use the parse json helper
-                OTMClient.parseJSONWithCompletionHandler(newData, completionHandler: completionHandler)
-                println("GET Request Success: \(response)")
+                
+                // Udacity needs first 5 chars skipped, Parse doesn't
+                if baseURL == Constants.UdacityBaseURL {
+                    // skip the first 5 characters in response!
+                    let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
+                    // use the json helper
+                    OTMClient.parseJSONWithCompletionHandler(newData, completionHandler: completionHandler)
+                    println("GET Udacity: Request Success: \(response)")
+                } else {
+                    // Parse response
+                    OTMClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
+                    println("GET Parse: Request Success \(response)")
+                }
             }
         })
         task.resume()

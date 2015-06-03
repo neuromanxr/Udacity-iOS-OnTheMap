@@ -7,70 +7,92 @@
 //
 
 import UIKit
+import MapKit
 
-class OTMMapViewController: UIViewController {
+class OTMMapViewController: UIViewController, LoginViewControllerDelegate {
 
+    @IBOutlet weak var mapView: MKMapView!
+    
+    var studentLocations = [OTMStudentLocations]()
+    let regionRadius: CLLocationDistance = 1000
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        OTMClient.sharedInstance().getStudentLocations { (result, error) -> Void in
-            if let result = result {
-                // got the student locations
-                println("got student locations \(result)")
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    // update UI
-                    println("updated the ui")
-                })
-                
-            } else {
-                // couldn't get the student locations
-                println(error)
-            }
-        }
+        mapView.delegate = self
         
-        OTMClient.sharedInstance().authenticateWithViewController(self, completionHandler: { (success, errorString) -> Void in
-            if success {
-                println("map: got the user data")
-            } else {
-                println("map: error \(errorString)")
-            }
-        })
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
-        OTMClient.sharedInstance().logoutOfSession(self, completionHandler: { (result, error) -> Void in
-            if let result = result {
-                println("logged out \(result)")
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    // update UI
-                    println("updated the UI")
-                })
-            } else {
-                // couldn't log out
-                println("couldn't logout \(error)")
-            }
-        })
-        
-//        OTMClient.sharedInstance().getSessionID { (success, sessionID, errorString) -> Void in
-//            
-//            println("result in map \(sessionID)")
-//            if let session = sessionID {
-//                // created new session
-//                println("session id response \(session)")
-//                
-//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                    println("updated the ui")
-//                })
-//            } else {
-//                // couldn't create new session
-//                println("error parse result \(errorString)")
-//            }
-//        }
+        self.login()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func createStudentAnnotations() -> Void {
+        
+    }
+    
+    func centerMapOnLocation(location: CLLocation) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
+    
+    func didLoggedIn(status: Bool) {
+        // if we are logged in, load the student locations
+        if status {
+            self.loadStudentLocations()
+        } else {
+            println("not logged in, don't get student locations")
+        }
+    }
+    
+    func login() -> Void {
+        
+        // login if there's no session id
+        if let session = OTMClient.sharedInstance().sessionID {
+            println("didFinish session: \(session)")
+        } else {
+            println("didFinish no session, login")
+            
+            let loginView = self.storyboard!.instantiateViewControllerWithIdentifier("LoginView") as! OTMLoginViewController
+            loginView.delegate = self
+            self.presentViewController(loginView, animated: false, completion: nil)
+        }
+    }
+    
+    func loadStudentLocations() -> Void {
+        
+        OTMClient.sharedInstance().getStudentLocations { (result, error) -> Void in
+            
+//            println("student locations \(result)")
+            if let result = result {
+                // got the student locations
+//                println("got student locations \(result)")
+                
+                for student in result {
+                    println("** Object \(student)")
+                    let studentObject = OTMStudentLocations.parseJSON(student)
+                    println("* name: \(studentObject.studentName) url: \(studentObject.studentLink) coordinate: \(studentObject.coordinate)")
+                    self.studentLocations.append(studentObject)
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    // update UI
+                    println("updated the ui")
+                    self.mapView.addAnnotations(self.studentLocations)
+                })
+                
+            } else {
+                // couldn't get the student locations
+                println("didn't get student locations \(error)")
+            }
+        }
     }
 
 

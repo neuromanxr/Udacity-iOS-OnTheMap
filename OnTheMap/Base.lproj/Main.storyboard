@@ -34,9 +34,17 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3Zj-xr-pDB">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </mapView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" id="6I7-LG-6sZ"/>
+                    <connections>
+                        <outlet property="mapView" destination="3Zj-xr-pDB" id="lCD-qT-ayV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
@@ -70,7 +78,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JzU-YO-kdH">
                                 <rect key="frame" x="16" y="365" width="568" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SXk-cN-ZCu">
                                 <rect key="frame" x="16" y="412" width="568" height="38"/>
@@ -99,11 +107,16 @@
                                     <action selector="signUpAction:" destination="Gob-nj-o2G" eventType="touchUpInside" id="hml-Zt-T6a"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HrF-sZ-C9q" customClass="FBSDKLoginButton">
+                                <rect key="frame" x="118" y="513" width="300" height="61"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.59999999999999998" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <connections>
                         <outlet property="emailTextField" destination="60n-9s-Wca" id="Bg6-Tu-v3k"/>
+                        <outlet property="facebookLoginButton" destination="HrF-sZ-C9q" id="4J7-By-SB8"/>
                         <outlet property="loginButton" destination="SXk-cN-ZCu" id="KXy-HD-Hbv"/>
                         <outlet property="passwordTextField" destination="JzU-YO-kdH" id="xUU-Rf-bxz"/>
                     </connections>

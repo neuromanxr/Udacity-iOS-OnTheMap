@@ -12,6 +12,12 @@ class OTMTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        OTMClient.sharedInstance().setupNavigationItem(self.navigationItem)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateStudentLocations", name: OTMClient.Constants.NotificationReload, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "loggedOut", name: OTMClient.Constants.NotificationLoggedOut, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showInfoPost", name: OTMClient.Constants.NotificationShowInfoPost, object: nil)
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -24,30 +30,64 @@ class OTMTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationReload, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationLoggedOut, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationShowInfoPost, object: nil)
+    }
+    
+    // MARK: - Student Locations
+    func updateStudentLocations() {
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            // update UI
+            println("updated the ui")
+            
+            self.tableView.reloadData()
+        })
+    }
+    
+    func loggedOut() -> Void {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.navigationItem.leftBarButtonItem?.enabled = false
+        })
+    }
+    
+    func showInfoPost() {
+        let infoPostViewController = self.storyboard!.instantiateViewControllerWithIdentifier("InfoPostView") as! OTMInfoPostViewController
+        infoPostViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
+        self.presentViewController(infoPostViewController, animated: true, completion: nil)
+    }
 
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Potentially incomplete method implementation.
         // Return the number of sections.
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return 0
+        println("Student Locations count \(OTMClient.sharedInstance().studentLocations.count)")
+        
+        return OTMClient.sharedInstance().studentLocations.count
     }
 
-    /*
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as! UITableViewCell
+        let cellIdentifier = "StudentInfo"
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! OTMTableViewCell
 
         // Configure the cell...
+        let studentObject = OTMClient.sharedInstance().studentLocations[indexPath.row]
+        
+        cell.studentLabel.text = studentObject.studentName
+        cell.pinImage.image = UIImage(named: "")
 
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.

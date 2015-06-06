@@ -24,6 +24,11 @@ extension OTMClient {
         
         // MARK: Max Student Locations
         static let MaxStudentLocationsValue = 100
+        
+        // MARK: Notifications
+        static let NotificationReload: String = "reload"
+        static let NotificationLoggedOut: String = "loggedOut"
+        static let NotificationShowInfoPost: String = "infoPost"
     }
     
     // MARK: Methods

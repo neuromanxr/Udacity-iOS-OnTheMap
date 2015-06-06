@@ -30,8 +30,11 @@ class OTMStudentLocations: NSObject, MKAnnotation {
     }
     
     class func parseJSON(results: [String: AnyObject]) -> OTMStudentLocations {
-        let title = results["firstName"] as! String
-        let studentName = results["firstName"] as! String
+        let firstName = results["firstName"] as! String
+        let lastName = results["lastName"] as! String
+        
+        let studentName = "\(firstName) \(lastName)"
+        let title = studentName
         let studentLink = results["mediaURL"] as! String
         
         let latitude = results["latitude"] as! Double

@@ -13,7 +13,6 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
     
-    var studentLocations = [OTMStudentLocations]()
     let regionRadius: CLLocationDistance = 1000
     
     override func viewDidLoad() {
@@ -21,6 +20,12 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         mapView.delegate = self
         
+        OTMClient.sharedInstance().setupNavigationItem(self.navigationItem)
+        
+        // listen for notifications
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateStudentLocations", name: OTMClient.Constants.NotificationReload, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "loggedOut", name: OTMClient.Constants.NotificationLoggedOut, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showInfoPost:", name: OTMClient.Constants.NotificationShowInfoPost, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -28,14 +33,18 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate {
         
         self.login()
     }
+    
+    deinit {
+        // stop listening to notifications
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationReload, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationLoggedOut, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationShowInfoPost, object: nil)
+        
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    func createStudentAnnotations() -> Void {
-        
     }
     
     func centerMapOnLocation(location: CLLocation) {
@@ -66,6 +75,35 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate {
         }
     }
     
+    func loggedOut() -> Void {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.navigationItem.leftBarButtonItem?.enabled = false
+        })
+    }
+    
+    func showInfoPost(sender: AnyObject) {
+        println("map view SENDER: \(sender)")
+        
+        let infoPostViewController = self.storyboard!.instantiateViewControllerWithIdentifier("InfoPostView") as! OTMInfoPostViewController
+        infoPostViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
+        self.presentViewController(infoPostViewController, animated: true, completion: nil)
+    }
+    
+    func updateStudentLocations() {
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            // update UI
+            println("updated the ui")
+            
+            // does existing annotations need to be cleared before reloading?
+            self.mapView.removeAnnotations(self.mapView.annotations)
+            
+            self.mapView.addAnnotations(OTMClient.sharedInstance().studentLocations)
+            
+            println("annotations \(self.mapView.annotations.count)")
+        })
+    }
+    
     func loadStudentLocations() -> Void {
         
         OTMClient.sharedInstance().getStudentLocations { (result, error) -> Void in
@@ -75,18 +113,15 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate {
                 // got the student locations
 //                println("got student locations \(result)")
                 
-                for student in result {
-                    println("** Object \(student)")
-                    let studentObject = OTMStudentLocations.parseJSON(student)
-                    println("* name: \(studentObject.studentName) url: \(studentObject.studentLink) coordinate: \(studentObject.coordinate)")
-                    self.studentLocations.append(studentObject)
-                }
+//                for student in result {
+//                    println("** Object \(student)")
+//                    let studentObject = OTMStudentLocations.parseJSON(student)
+//                    println("* name: \(studentObject.studentName) url: \(studentObject.studentLink) coordinate: \(studentObject.coordinate)")
+//                    OTMClient.sharedInstance().studentLocations.append(studentObject)
+//
+//                }
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    // update UI
-                    println("updated the ui")
-                    self.mapView.addAnnotations(self.studentLocations)
-                })
+                self.updateStudentLocations()
                 
             } else {
                 // couldn't get the student locations

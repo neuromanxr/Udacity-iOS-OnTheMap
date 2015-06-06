@@ -30,8 +30,10 @@ extension OTMMapViewController: MKMapViewDelegate {
     }
     
     func mapView(mapView: MKMapView!, annotationView view: MKAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
+        // get the annotation tapped
         let studentObject = view.annotation as? OTMStudentLocations
         println("student url \(studentObject?.studentLink)")
+        // open the url in Safari
         let studentURL = NSURL(string: studentObject?.studentLink as String!)
         UIApplication.sharedApplication().openURL(studentURL!)
     }

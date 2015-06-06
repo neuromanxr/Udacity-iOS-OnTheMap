@@ -57,18 +57,24 @@ class OTMLoginViewController: UIViewController {
     
     @IBAction func loginAction(sender: UIButton) {
         
-        emailTextField.text.isEmpty
-        OTMClient.sharedInstance().authenticateWithViewController(self, completionHandler: { (success, errorString) -> Void in
-            if success {
-                println("login success")
-                // tell map view we are logged in, so load the student locations
-                self.delegate?.didLoggedIn(true)
-                
-                self.dismissViewControllerAnimated(true, completion: nil)
-            } else {
-                println("login error \(errorString)")
-            }
-        })
+        if !emailTextField.text.isEmpty || !passwordTextField.text.isEmpty {
+            OTMClient.sharedInstance().authenticateWithViewController(self, completionHandler: { (success, errorString) -> Void in
+                if success {
+                    println("login success")
+                    // tell map view we are logged in, so load the student locations
+                    self.delegate?.didLoggedIn(true)
+                    
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                } else {
+                    println("login error \(errorString)")
+                    let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Login", message: "Invalid Login!", actionTitle: "OK")
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                }
+            })
+        } else {
+            let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Login", message: "Enter login and password!", actionTitle: "OK")
+            self.presentViewController(alertController, animated: true, completion: nil)
+        }
     }
 
     @IBAction func signUpAction(sender: UIButton) {

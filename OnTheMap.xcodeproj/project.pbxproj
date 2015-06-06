@@ -10,7 +10,6 @@
 		506FC5B31B1E5CFC00ABA812 /* OTMStudentLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506FC5B21B1E5CFC00ABA812 /* OTMStudentLocations.swift */; };
 		506FC5B51B1E645400ABA812 /* OTMMapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506FC5B41B1E645400ABA812 /* OTMMapViewDelegate.swift */; };
 		50B29C4F1B0E3888000742AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B29C4E1B0E3888000742AE /* AppDelegate.swift */; };
-		50B29C511B0E3888000742AE /* OTMMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B29C501B0E3888000742AE /* OTMMapViewController.swift */; };
 		50B29C541B0E3888000742AE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50B29C521B0E3888000742AE /* Main.storyboard */; };
 		50B29C561B0E3888000742AE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50B29C551B0E3888000742AE /* Images.xcassets */; };
 		50B29C591B0E3888000742AE /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50B29C571B0E3888000742AE /* LaunchScreen.xib */; };
@@ -20,6 +19,11 @@
 		50B29C731B0E507F000742AE /* OTMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B29C721B0E507F000742AE /* OTMClient.swift */; };
 		50B29C751B0E56D5000742AE /* OTMConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B29C741B0E56D5000742AE /* OTMConstants.swift */; };
 		50B29C771B0E68AA000742AE /* OTMConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B29C761B0E68AA000742AE /* OTMConvenience.swift */; };
+		50CBF4C31B1F5C8C00A893A4 /* OTMTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CBF4C21B1F5C8C00A893A4 /* OTMTableViewCell.swift */; };
+		50CBF4C51B1F690E00A893A4 /* OTMMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CBF4C41B1F690E00A893A4 /* OTMMapViewController.swift */; };
+		50CBF4C71B1F9E7300A893A4 /* OTMNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CBF4C61B1F9E7300A893A4 /* OTMNotifications.swift */; };
+		50CBF4C91B20A92900A893A4 /* OTMInfoPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CBF4C81B20A92800A893A4 /* OTMInfoPostViewController.swift */; };
+		50CBF4CB1B20F59900A893A4 /* OTMAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CBF4CA1B20F59900A893A4 /* OTMAlerts.swift */; };
 		50CE8C641B179D290035C27A /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE8C631B179D290035C27A /* FBSDKCoreKit.framework */; };
 		50CE8C661B17A8690035C27A /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE8C651B17A8690035C27A /* FBSDKLoginKit.framework */; };
 		50CE8C681B17C1AF0035C27A /* OTMFacebookDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CE8C671B17C1AF0035C27A /* OTMFacebookDelegate.swift */; };
@@ -42,7 +46,6 @@
 		50B29C491B0E3888000742AE /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50B29C4D1B0E3888000742AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B29C4E1B0E3888000742AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		50B29C501B0E3888000742AE /* OTMMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTMMapViewController.swift; sourceTree = "<group>"; };
 		50B29C531B0E3888000742AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		50B29C551B0E3888000742AE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		50B29C581B0E3888000742AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -54,6 +57,11 @@
 		50B29C721B0E507F000742AE /* OTMClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMClient.swift; sourceTree = "<group>"; };
 		50B29C741B0E56D5000742AE /* OTMConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMConstants.swift; sourceTree = "<group>"; };
 		50B29C761B0E68AA000742AE /* OTMConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMConvenience.swift; sourceTree = "<group>"; };
+		50CBF4C21B1F5C8C00A893A4 /* OTMTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMTableViewCell.swift; sourceTree = "<group>"; };
+		50CBF4C41B1F690E00A893A4 /* OTMMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMMapViewController.swift; sourceTree = "<group>"; };
+		50CBF4C61B1F9E7300A893A4 /* OTMNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMNotifications.swift; sourceTree = "<group>"; };
+		50CBF4C81B20A92800A893A4 /* OTMInfoPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMInfoPostViewController.swift; sourceTree = "<group>"; };
+		50CBF4CA1B20F59900A893A4 /* OTMAlerts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMAlerts.swift; sourceTree = "<group>"; };
 		50CE8C631B179D290035C27A /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		50CE8C651B17A8690035C27A /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		50CE8C671B17C1AF0035C27A /* OTMFacebookDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMFacebookDelegate.swift; sourceTree = "<group>"; };
@@ -103,15 +111,19 @@
 			children = (
 				50B29C4E1B0E3888000742AE /* AppDelegate.swift */,
 				50B29C721B0E507F000742AE /* OTMClient.swift */,
+				50CBF4C61B1F9E7300A893A4 /* OTMNotifications.swift */,
+				50CBF4CA1B20F59900A893A4 /* OTMAlerts.swift */,
 				50B29C761B0E68AA000742AE /* OTMConvenience.swift */,
 				50B29C741B0E56D5000742AE /* OTMConstants.swift */,
 				506FC5B21B1E5CFC00ABA812 /* OTMStudentLocations.swift */,
 				506FC5B41B1E645400ABA812 /* OTMMapViewDelegate.swift */,
-				50B29C501B0E3888000742AE /* OTMMapViewController.swift */,
+				50CBF4C41B1F690E00A893A4 /* OTMMapViewController.swift */,
 				50B29C6E1B0E4310000742AE /* OTMTableViewController.swift */,
+				50CBF4C21B1F5C8C00A893A4 /* OTMTableViewCell.swift */,
 				50B29C701B0E44F4000742AE /* OTMLoginViewController.swift */,
 				50CE8C691B1D0EA10035C27A /* OTMLoginTextFieldDelegate.swift */,
 				50CE8C671B17C1AF0035C27A /* OTMFacebookDelegate.swift */,
+				50CBF4C81B20A92800A893A4 /* OTMInfoPostViewController.swift */,
 				50B29C521B0E3888000742AE /* Main.storyboard */,
 				50B29C551B0E3888000742AE /* Images.xcassets */,
 				50B29C571B0E3888000742AE /* LaunchScreen.xib */,
@@ -256,17 +268,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50CBF4C71B1F9E7300A893A4 /* OTMNotifications.swift in Sources */,
 				50B29C751B0E56D5000742AE /* OTMConstants.swift in Sources */,
 				506FC5B31B1E5CFC00ABA812 /* OTMStudentLocations.swift in Sources */,
 				506FC5B51B1E645400ABA812 /* OTMMapViewDelegate.swift in Sources */,
 				50CE8C681B17C1AF0035C27A /* OTMFacebookDelegate.swift in Sources */,
 				50B29C6F1B0E4310000742AE /* OTMTableViewController.swift in Sources */,
 				50CE8C6A1B1D0EA10035C27A /* OTMLoginTextFieldDelegate.swift in Sources */,
-				50B29C511B0E3888000742AE /* OTMMapViewController.swift in Sources */,
 				50B29C731B0E507F000742AE /* OTMClient.swift in Sources */,
+				50CBF4C31B1F5C8C00A893A4 /* OTMTableViewCell.swift in Sources */,
 				50B29C4F1B0E3888000742AE /* AppDelegate.swift in Sources */,
 				50B29C711B0E44F4000742AE /* OTMLoginViewController.swift in Sources */,
+				50CBF4C51B1F690E00A893A4 /* OTMMapViewController.swift in Sources */,
 				50B29C771B0E68AA000742AE /* OTMConvenience.swift in Sources */,
+				50CBF4C91B20A92900A893A4 /* OTMInfoPostViewController.swift in Sources */,
+				50CBF4CB1B20F59900A893A4 /* OTMAlerts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -20,9 +20,11 @@ extension OTMClient {
                 self.sessionID = sessionID
                 println("auth session id \(self.sessionID)")
                 // then get the user data using the session id (user_id)
-                self.getPublicUserData({ (success, result, errorString) -> Void in
+                self.getPublicUserData({ (success, name, errorString) -> Void in
                     if success {
-                        println("success got user data \(result)")
+                        // store your name for this session
+                        self.yourName = name
+                        println("success got user data \(self.yourName)")
                         completionHandler(success: success, errorString: errorString)
                     } else {
                         completionHandler(success: success, errorString: errorString)
@@ -35,7 +37,7 @@ extension OTMClient {
     }
     
     // MARK: - DELETE - logout of session
-    func logoutOfSession(hostViewController: UIViewController, completionHandler: (result: [String: AnyObject]?, error: NSError?) -> Void) {
+    func logoutOfSession(completionHandler: (result: [String: AnyObject]?, error: NSError?) -> Void) {
         
         let urlString = Constants.UdacityBaseURL + Methods.AuthenticationSessionNew
         let url = NSURL(string: urlString)
@@ -87,7 +89,20 @@ extension OTMClient {
                 if let results = result.valueForKey(JSONResponseKeys.Results) as? [[String: AnyObject]] {
                     // parsed the json result
                     completionHandler(result: results, error: nil)
-                    println("student locations: got the result \(results)")
+//                    println("student locations: got the result \(results)")
+                    
+                    // clear the original data first
+                    OTMClient.sharedInstance().studentLocations = [OTMStudentLocations]()
+                    
+                    for student in results {
+//                        println("** Object \(student)")
+                        let studentObject = OTMStudentLocations.parseJSON(student)
+//                        println("* name: \(studentObject.studentName) url: \(studentObject.studentLink) coordinate: \(studentObject.coordinate)")
+                        OTMClient.sharedInstance().studentLocations.append(studentObject)
+                        
+                    }
+                    println("student locations array \(OTMClient.sharedInstance().studentLocations.count)")
+                    
                 } else {
                     // couldn't parse the json result
                     println("GET student locations: couldn't parse results")
@@ -129,7 +144,7 @@ extension OTMClient {
     }
     
     // MARK: -UDACITY - get the public user data from Udacity
-    func getPublicUserData(completionHandler: (success: Bool, result: [String: AnyObject]?, errorString: String?) -> Void) {
+    func getPublicUserData(completionHandler: (success: Bool, name: String?, errorString: String?) -> Void) {
         // specify parameters
         var parameters = [String: AnyObject]()
         // there's no header field
@@ -142,16 +157,22 @@ extension OTMClient {
         taskForGETMethod(Constants.UdacityBaseURL, method: mutableMethod, parameters: parameters, requestValues: requestValues) { (result, error) -> Void in
             if let error = error {
                 // there was an error in the request
-                completionHandler(success: false, result: nil, errorString: "request error: get public user data failed")
+                completionHandler(success: false, name: nil, errorString: "request error: get public user data failed")
             } else {
                 // got the json result
-                println("user data results \(result)")
+//                println("user data results \(result)")
                 if let results = result.valueForKey(JSONResponseKeys.User) as? [String: AnyObject] {
+                    
+                    // get your name
+                    let firstName = results["first_name"] as? String
+                    let lastName = results["last_name"] as? String
+                    let yourName = "\(firstName!) \(lastName!)"
+//                    println("GET: user data results \(yourName)")
                     // parsed the json result
-                    completionHandler(success:true, result: results, errorString: nil)
+                    completionHandler(success:true, name: yourName, errorString: nil)
                 } else {
                     // couldn't parse the json result
-                    completionHandler(success: false, result: nil, errorString: "couldn't parse result: get public user data failed")
+                    completionHandler(success: false, name: nil, errorString: "couldn't parse result: get public user data failed")
                 }
             }
         }

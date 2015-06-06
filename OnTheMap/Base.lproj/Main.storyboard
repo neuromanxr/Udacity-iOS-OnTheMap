@@ -15,8 +15,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="viewControllers" id="Ybj-ez-IDh"/>
-                        <segue destination="yPO-jH-ASE" kind="relationship" relationship="viewControllers" id="fT9-y7-fNT"/>
+                        <segue destination="I1S-qk-SP0" kind="relationship" relationship="viewControllers" id="Ybj-ez-IDh"/>
+                        <segue destination="duF-Yz-Ckx" kind="relationship" relationship="viewControllers" id="fT9-y7-fNT"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NPg-or-VeH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -41,13 +41,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Map" id="6I7-LG-6sZ"/>
+                    <navigationItem key="navigationItem" id="32w-Na-8Ip"/>
                     <connections>
                         <outlet property="mapView" destination="3Zj-xr-pDB" id="lCD-qT-ayV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1092" y="227"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="M39-FU-MKJ">
@@ -125,20 +126,150 @@
             </objects>
             <point key="canvasLocation" x="-532" y="1411"/>
         </scene>
+        <!--Info Post View Controller-->
+        <scene sceneID="G8K-DY-Dvh">
+            <objects>
+                <viewController storyboardIdentifier="InfoPostView" id="vyE-2q-13c" customClass="OTMInfoPostViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="eib-nO-0L9"/>
+                        <viewControllerLayoutGuide type="bottom" id="hYH-d8-ycq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="pL4-fw-Xcd">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="oFa-Pp-WmG">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </mapView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t3Z-z0-5rP">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="215"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Link" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9WF-pI-65O">
+                                        <rect key="frame" x="160" y="65" width="280" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Where are you" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZVf-n3-kVO">
+                                        <rect key="frame" x="172" y="59" width="256" height="42"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="36"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cdH-Ao-Gbc">
+                                        <rect key="frame" x="522" y="21" width="70" height="30"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                        <state key="normal" title="Cancel">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="cancelButtonAction:" destination="vyE-2q-13c" eventType="touchUpInside" id="XSQ-fD-R97"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="studying" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dih-dd-gBE">
+                                        <rect key="frame" x="218" y="109" width="164" height="42"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="36"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="today?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wgh-zK-wu8">
+                                        <rect key="frame" x="243" y="159" width="114" height="42"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="36"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BNW-tu-9PR">
+                                <rect key="frame" x="0.0" y="450" width="600" height="150"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tAm-my-UU7">
+                                        <rect key="frame" x="200" y="60" width="200" height="30"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                        <state key="normal" title="Find on the Map">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="bottomBarButtonAction:" destination="vyE-2q-13c" eventType="touchUpInside" id="hfk-4N-eTB"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H48-yJ-Yk3">
+                                        <rect key="frame" x="200" y="60" width="200" height="30"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                        <state key="normal" title="Submit">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="bottomBarButtonAction:" destination="vyE-2q-13c" eventType="touchUpInside" id="jhf-WB-4TJ"/>
+                                            <action selector="submitPost:" destination="vyE-2q-13c" eventType="touchUpInside" id="mpW-8D-Tpg"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r4x-6X-ITd">
+                                <rect key="frame" x="0.0" y="216" width="600" height="233"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Location" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="t7e-oM-M1L">
+                                        <rect key="frame" x="160" y="19" width="280" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="0Ey-N9-Cwb"/>
+                    <connections>
+                        <outlet property="bottomBarButton" destination="tAm-my-UU7" id="iCN-dm-WDV"/>
+                        <outlet property="bottomBarView" destination="BNW-tu-9PR" id="c3h-SQ-DvG"/>
+                        <outlet property="linkTextField" destination="9WF-pI-65O" id="SwU-Eo-6OZ"/>
+                        <outlet property="locationTextField" destination="t7e-oM-M1L" id="Q5a-J2-YxA"/>
+                        <outlet property="mapView" destination="oFa-Pp-WmG" id="aJL-AE-Lue"/>
+                        <outlet property="middleBarView" destination="r4x-6X-ITd" id="Q4H-qt-pFL"/>
+                        <outlet property="submitButton" destination="H48-yJ-Yk3" id="xQB-pG-rTS"/>
+                        <outlet property="topBarCancelButton" destination="cdH-Ao-Gbc" id="dFe-pa-fp1"/>
+                        <outlet property="topBarLabel" destination="ZVf-n3-kVO" id="YlJ-0I-atv"/>
+                        <outlet property="topBarLabelBold" destination="Dih-dd-gBE" id="UmI-W9-Dns"/>
+                        <outlet property="topBarLabelQuestion" destination="wgh-zK-wu8" id="eyl-a0-8RU"/>
+                        <outlet property="topBarView" destination="t3Z-z0-5rP" id="dHc-Rn-DOp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ndu-0j-Rtb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="280" y="2090"/>
+        </scene>
         <!--List-->
         <scene sceneID="Smd-97-jUY">
             <objects>
                 <tableViewController storyboardIdentifier="TableView" title="List" id="yPO-jH-ASE" customClass="OTMTableViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="bLe-dN-xQZ">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" sectionHeaderHeight="22" sectionFooterHeight="22" id="bLe-dN-xQZ">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="n8s-jt-nLs">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StudentInfo" rowHeight="70" id="n8s-jt-nLs" customClass="OTMTableViewCell" customModule="OnTheMap" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="n8s-jt-nLs" id="WWf-yZ-tVv">
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NQI-kN-2Oe">
+                                            <rect key="frame" x="119" y="5" width="450" height="60"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hdO-yv-eX9">
+                                            <rect key="frame" x="25" y="5" width="60" height="60"/>
+                                        </imageView>
+                                    </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="pinImage" destination="hdO-yv-eX9" id="uGh-Mh-8cM"/>
+                                    <outlet property="studentLabel" destination="NQI-kN-2Oe" id="c7y-Tt-wx2"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -146,9 +277,47 @@
                             <outlet property="delegate" destination="yPO-jH-ASE" id="1bW-9w-xuA"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="List" id="cFS-lk-VhC"/>
+                    <navigationItem key="navigationItem" id="Li8-Fc-9G5"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bat-cq-Xxs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1092" y="1014"/>
+        </scene>
+        <!--Map-->
+        <scene sceneID="zUj-vN-J8N">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="I1S-qk-SP0" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Map" id="6I7-LG-6sZ"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="3xX-c0-w47">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="v1O-4T-OZX"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mNF-fQ-1IR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-35" y="-466"/>
+        </scene>
+        <!--List-->
+        <scene sceneID="Ilc-MS-1J4">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="duF-Yz-Ckx" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="List" id="cFS-lk-VhC"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="aeM-P2-yAB">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="yPO-jH-ASE" kind="relationship" relationship="rootViewController" id="vDj-XB-dbT"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ssj-pA-Mwb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="280" y="1014"/>
         </scene>

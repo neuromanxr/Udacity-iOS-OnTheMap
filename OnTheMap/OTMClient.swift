@@ -19,6 +19,11 @@ class OTMClient: NSObject {
     var email: String? = nil
     var pass: String? = nil
     
+    var yourName: String? = nil
+    
+    // student locations
+    var studentLocations = [OTMStudentLocations]()
+    
     // initialize shared NSURL session
     override init() {
         session = NSURLSession.sharedSession()

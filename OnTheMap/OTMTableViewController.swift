@@ -8,16 +8,21 @@
 
 import UIKit
 
-class OTMTableViewController: UITableViewController {
+class OTMTableViewController: UITableViewController, OTMBarButtonDelegate, LoginViewControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        OTMClient.sharedInstance().delegate = self
         OTMClient.sharedInstance().setupNavigationItem(self.navigationItem)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateStudentLocations", name: OTMClient.Constants.NotificationReload, object: nil)
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loggedOut", name: OTMClient.Constants.NotificationLoggedOut, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showInfoPost", name: OTMClient.Constants.NotificationShowInfoPost, object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "loggedIn", name: OTMClient.Constants.NotificationLoggedIn, object: nil)
+        
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showInfoPost", name: OTMClient.Constants.NotificationShowInfoPost, object: nil)
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -34,8 +39,38 @@ class OTMTableViewController: UITableViewController {
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationReload, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationLoggedOut, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationShowInfoPost, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationLoggedIn, object: nil)
+//        NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationShowInfoPost, object: nil)
     }
+    
+    func barButtonShowLogin() {
+        let loginView = self.storyboard!.instantiateViewControllerWithIdentifier("LoginView") as! OTMLoginViewController
+        loginView.delegate = self
+        self.presentViewController(loginView, animated: false, completion: nil)
+    }
+    
+    func barButtonShowInfoPost() {
+        println("barButton: info post presented in table view")
+        let infoPostViewController = self.storyboard!.instantiateViewControllerWithIdentifier("InfoPostView") as! OTMInfoPostViewController
+        infoPostViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
+        self.presentViewController(infoPostViewController, animated: true, completion: nil)
+    }
+    
+    func didLoggedIn(status: Bool) {
+        // if we are logged in, load the student locations
+        if status {
+            println("logged in")
+        } else {
+            println("not logged in, don't get student locations")
+        }
+    }
+    
+//    func barButtonLogout() {
+//        println("barButton: logout in table view")
+//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//            self.navigationItem.leftBarButtonItem?.enabled = false
+//        })
+//    }
     
     // MARK: - Student Locations
     func updateStudentLocations() {
@@ -49,16 +84,27 @@ class OTMTableViewController: UITableViewController {
     }
     
     func loggedOut() -> Void {
+        println("barButton: logout in table view")
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.navigationItem.leftBarButtonItem?.enabled = false
+//            self.navigationItem.leftBarButtonItem?.enabled = false
+            OTMClient.sharedInstance().swapLeftBarButton(barButtonType.login, item: self.navigationItem)
         })
     }
     
-    func showInfoPost() {
-        let infoPostViewController = self.storyboard!.instantiateViewControllerWithIdentifier("InfoPostView") as! OTMInfoPostViewController
-        infoPostViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
-        self.presentViewController(infoPostViewController, animated: true, completion: nil)
+    func loggedIn() -> Void {
+        // logged in, change the button to logout
+        println("barButton: logged out in map view")
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            OTMClient.sharedInstance().swapLeftBarButton(barButtonType.logout, item: self.navigationItem)
+        })
     }
+    
+//    func showInfoPost() {
+//        let infoPostViewController = self.storyboard!.instantiateViewControllerWithIdentifier("InfoPostView") as! OTMInfoPostViewController
+//        infoPostViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
+//        self.presentViewController(infoPostViewController, animated: true, completion: nil)
+//    }
 
     // MARK: - Table view data source
 

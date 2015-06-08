@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import FBSDKLoginKit
 
 extension OTMClient {
     
@@ -37,7 +38,7 @@ extension OTMClient {
     }
     
     // MARK: - DELETE - logout of session
-    func logoutOfSession(completionHandler: (result: [String: AnyObject]?, error: NSError?) -> Void) {
+    func logoutOfSession(completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         
         let urlString = Constants.UdacityBaseURL + Methods.AuthenticationSessionNew
         let url = NSURL(string: urlString)
@@ -59,7 +60,8 @@ extension OTMClient {
                 completionHandler(result: nil, error: newError)
             } else {
                 let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
-                println("DELETE logout \(response)")
+                OTMClient.parseJSONWithCompletionHandler(newData, completionHandler: completionHandler)
+//                println("DELETE logout \(response)")
             }
         })
         task.resume()
@@ -225,8 +227,11 @@ extension OTMClient {
             HeaderFieldKeys.HeaderFieldUdacityContentType: HeaderFieldValues.HeaderFieldUdacityValue
         ]
         
+        // facebook token
+        let token = FBSDKAccessToken.currentAccessToken().tokenString
+//        println("get FBSession token: \(token)")
         // json body with Facebook access token
-        var accessToken: [String: String] = ["access_token": "string"]
+        var accessToken: [String: String] = ["access_token": token]
         let jsonBody: [String: AnyObject] = ["facebook_mobile": accessToken]
         
         // make the request

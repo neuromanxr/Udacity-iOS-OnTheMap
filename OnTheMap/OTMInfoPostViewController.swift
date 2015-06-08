@@ -39,25 +39,25 @@ class OTMInfoPostViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func dismissInfoPostView() {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
+//    func dismissInfoPostView() {
+//        self.dismissViewControllerAnimated(true, completion: nil)
+//    }
     
-    func setupNavigationBar() {
-        
-        let navigationBar = UINavigationBar(frame: CGRectMake(0, 0, self.view.frame.width, 120))
-        self.view.addSubview(navigationBar)
-        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: "dismissInfoPostView")
-        let titleLabel = UILabel(frame: CGRectMake(0, -10, navigationBar.frame.width / 2, navigationBar.frame.height))
-        titleLabel.textAlignment = NSTextAlignment.Center
-        titleLabel.text = "POST INFO"
-        titleLabel.sizeToFit()
-        let navigationItems = UINavigationItem(title: titleLabel.text)
-        navigationItems.titleView = titleLabel
-        
-        navigationItems.rightBarButtonItem = cancelButton
-        navigationBar.items = [navigationItems]
-    }
+//    func setupNavigationBar() {
+//        
+//        let navigationBar = UINavigationBar(frame: CGRectMake(0, 0, self.view.frame.width, 120))
+//        self.view.addSubview(navigationBar)
+//        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: "dismissInfoPostView")
+//        let titleLabel = UILabel(frame: CGRectMake(0, -10, navigationBar.frame.width / 2, navigationBar.frame.height))
+//        titleLabel.textAlignment = NSTextAlignment.Center
+//        titleLabel.text = "POST INFO"
+//        titleLabel.sizeToFit()
+//        let navigationItems = UINavigationItem(title: titleLabel.text)
+//        navigationItems.titleView = titleLabel
+//        
+//        navigationItems.rightBarButtonItem = cancelButton
+//        navigationBar.items = [navigationItems]
+//    }
     
     @IBAction func cancelButtonAction(sender: UIButton) {
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -97,10 +97,19 @@ class OTMInfoPostViewController: UIViewController {
     }
     
     @IBAction func submitPost(sender: UIButton) {
-        // post
-        
-        // then dismiss view
-        self.dismissViewControllerAnimated(true, completion: nil)
+        // check for empty text field
+        if self.linkTextField.text.isEmpty {
+            // show an alert if there's no text
+            let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Submit Post", message: "Enter a link!", actionTitle: "OK")
+            self.presentViewController(alertController, animated: true, completion: nil)
+        } else {
+            // post the link
+            OTMClient.sharedInstance().postStudentLocation({ (success, result, errorString) -> Void in
+                <#code#>
+            })
+            // then dismiss view
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
     
     func getLocationFromString(string: String, withCompletion completion: (location: CLLocation?, error: NSError?) -> ()) {

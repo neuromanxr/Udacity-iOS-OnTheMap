@@ -9,7 +9,7 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
-
+// MARK - dsd
 protocol LoginViewControllerDelegate {
     func didLoggedIn(status: Bool)
 }
@@ -40,6 +40,8 @@ class OTMLoginViewController: UIViewController {
         // assign tags to text fields
         emailTextField.tag = textFieldType.email.rawValue
         passwordTextField.tag = textFieldType.password.rawValue
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dismiss", name: OTMClient.Constants.NotificationFacebookLoggedIn, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -49,10 +51,18 @@ class OTMLoginViewController: UIViewController {
             println("There's a current access token \(FBSDKAccessToken.currentAccessToken().tokenString)")
         }
     }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationFacebookLoggedIn, object: nil)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func dismiss() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func loginAction(sender: UIButton) {
@@ -63,6 +73,8 @@ class OTMLoginViewController: UIViewController {
                     println("login success")
                     // tell map view we are logged in, so load the student locations
                     self.delegate?.didLoggedIn(true)
+                    // logged in, change the left bar button to logout
+                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedIn, object: nil)
                     
                     self.dismissViewControllerAnimated(true, completion: nil)
                 } else {
@@ -78,6 +90,8 @@ class OTMLoginViewController: UIViewController {
     }
 
     @IBAction func signUpAction(sender: UIButton) {
+        let signUpURL = NSURL(string: "https://www.google.com/url?q=https%3A%2F%2Fwww.udacity.com%2Faccount%2Fauth%23!%2Fsignin&sa=D&sntz=1&usg=AFQjCNERmggdSkRb9MFkqAW_5FgChiCxAQ")
+        UIApplication.sharedApplication().openURL(signUpURL!)
     }
     /*
     // MARK: - Navigation

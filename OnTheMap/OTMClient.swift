@@ -8,7 +8,19 @@
 
 import UIKit
 
+// methods called when respective navigation bar button tapped
+protocol OTMBarButtonDelegate {
+//    func barButtonLogout()
+    func barButtonShowInfoPost()
+    func barButtonShowLogin()
+}
+
 class OTMClient: NSObject {
+    
+    var navigationItem: UINavigationItem?
+    
+    // delegate for shared navigation bar buttons
+    var delegate: OTMBarButtonDelegate?
     
     // shared session
     var session: NSURLSession
@@ -16,6 +28,7 @@ class OTMClient: NSObject {
     // authentication state
     var sessionID: String? = nil
     
+    // store the login?
     var email: String? = nil
     var pass: String? = nil
     

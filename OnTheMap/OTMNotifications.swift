@@ -7,6 +7,12 @@
 //
 
 import UIKit
+import FBSDKLoginKit
+
+enum barButtonType: Int {
+    case login
+    case logout
+}
 
 extension OTMClient {
     
@@ -18,16 +24,41 @@ extension OTMClient {
         let pinButton = UIBarButtonItem(title: "Pin", style: UIBarButtonItemStyle.Plain, target: self, action: "showInfoPostingView:")
         item.rightBarButtonItems = [reloadButton ,pinButton]
         item.leftBarButtonItem = logoutButton
+        
+        self.navigationItem = item
+    }
+    
+    func swapLeftBarButton(button: barButtonType, item: UINavigationItem) {
+        let logoutButton = UIBarButtonItem(title: "Logout", style: UIBarButtonItemStyle.Plain, target: self, action: "logout")
+        let loginButton = UIBarButtonItem(title: "Login", style: UIBarButtonItemStyle.Plain, target: self, action: "showLoginView")
+        
+        item.leftBarButtonItem = nil
+        
+        switch button {
+            case .login: return item.leftBarButtonItem = loginButton
+            case .logout: return item.leftBarButtonItem = logoutButton
+        }
     }
     
     func logout() {
-        OTMClient.sharedInstance().logoutOfSession { (result, error) -> Void in
-            if let result = result {
-                println("Logout: \(result)")
-                
-                NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
-            } else {
-                println("Logout: error")
+        
+        if FBSDKAccessToken.currentAccessToken() != nil {
+            FBSDKAccessToken.setCurrentAccessToken(nil)
+            println("Facebook: logged out, token cleared")
+            NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
+        } else {
+            println("Facebook: Was not logged in, No token")
+            OTMClient.sharedInstance().logoutOfSession { (result, error) -> Void in
+                if let result = result.valueForKey(JSONResponseKeys.SessionID) as? [String: AnyObject] {
+                    // tell the delegate the logout button was tapped
+                    //                self.delegate?.barButtonLogout()
+                    println("barButton: Logout \(result)")
+                    
+                    
+                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
+                } else {
+                    println("Logout: error")
+                }
             }
         }
     }
@@ -37,7 +68,7 @@ extension OTMClient {
         // post the notification to update the student locations
         OTMClient.sharedInstance().getStudentLocations { (result, error) -> Void in
             if let result = result {
-                
+                // reload the student data in map and table view
                 NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationReload, object: nil)
                 println("Note posted")
             } else {
@@ -47,9 +78,15 @@ extension OTMClient {
     }
     
     func showInfoPostingView(sender: AnyObject) {
-        
-        println("info post SENDER: \(sender)")
-        NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationShowInfoPost, object: sender)
+        // tell the delegate to show info post view when pin button tapped
+        println("show info post")
+        self.delegate?.barButtonShowInfoPost()
+//        NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationShowInfoPost, object: sender)
+    }
+    
+    func showLoginView() {
+        println("delegate show login")
+        self.delegate?.barButtonShowLogin()
     }
    
 }

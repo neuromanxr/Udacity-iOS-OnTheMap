@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import FBSDKLoginKit
 
 class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBarButtonDelegate {
 
@@ -23,11 +24,13 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
         
         OTMClient.sharedInstance().setupNavigationItem(self.navigationItem)
         
+        self.loadStudentLocations()
+        
         
         // listen for notifications
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadStudentLocations", name: OTMClient.Constants.NotificationLoadStudents, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateStudentLocations", name: OTMClient.Constants.NotificationReload, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadStudentLocations", name: OTMClient.Constants.NotificationReload, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loggedOut", name: OTMClient.Constants.NotificationLoggedOut, object: nil)
         
@@ -84,7 +87,7 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
         mapView.setRegion(coordinateRegion, animated: true)
     }
-    
+    // delete
     func didLoggedIn(status: Bool) {
         // if we are logged in, load the student locations
         if status {
@@ -97,8 +100,9 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
     func login() -> Void {
         
         // login if there's no session id
-        if let session = OTMClient.sharedInstance().sessionID {
-            println("didFinish session: \(session)")
+        if OTMClient.sharedInstance().sessionID != nil {
+            
+            println("didFinish session: \(OTMClient.sharedInstance().sessionID), \(FBSDKAccessToken.currentAccessToken()?.tokenString)")
         } else {
             println("didFinish no session, login")
             

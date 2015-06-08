@@ -241,6 +241,7 @@ extension OTMClient {
             } else {
                 if let session = result.valueForKey("account")?.valueForKey("key") as? String {
                     println("session id \(session)")
+
                     completionHandler(success: true, sessionID: session, errorString: nil)
                 } else {
                     completionHandler(success: false, sessionID: nil, errorString: "couldn't parse results. login failed (facebook session id)")
@@ -295,7 +296,13 @@ extension OTMClient {
         ]
         
         // json body
-        let jsonBody: [String: String] = ["uniqueKey": "numbers", "firstName": "string", "lastName": "string", "mapString": "string", "mediaURL": "string", "latitude": "float", "longitude": "float"]
+        let firstName = OTMClient.sharedInstance().yourName!.componentsSeparatedByString(" ").first
+        let lastName = OTMClient.sharedInstance().yourName!.componentsSeparatedByString(" ").last
+        let mapString = OTMClient.sharedInstance().yourMapString!
+        let location = OTMClient.sharedInstance().yourCoordinates!
+        let url = OTMClient.sharedInstance().yourLink!
+        
+        let jsonBody: [String: AnyObject] = ["uniqueKey": "8888", "firstName": firstName!, "lastName": lastName!, "mapString": mapString, "mediaURL": url, "latitude": location.coordinate.latitude, "longitude": location.coordinate.longitude]
         
         // make the request
         taskForPOSTMethod(Constants.ParseBaseURL, method: Methods.StudentLocations, parameters: parameters, requestValues: requestValues, jsonBody: jsonBody) { (result, error) -> Void in

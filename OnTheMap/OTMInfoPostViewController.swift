@@ -39,26 +39,6 @@ class OTMInfoPostViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-//    func dismissInfoPostView() {
-//        self.dismissViewControllerAnimated(true, completion: nil)
-//    }
-    
-//    func setupNavigationBar() {
-//        
-//        let navigationBar = UINavigationBar(frame: CGRectMake(0, 0, self.view.frame.width, 120))
-//        self.view.addSubview(navigationBar)
-//        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: "dismissInfoPostView")
-//        let titleLabel = UILabel(frame: CGRectMake(0, -10, navigationBar.frame.width / 2, navigationBar.frame.height))
-//        titleLabel.textAlignment = NSTextAlignment.Center
-//        titleLabel.text = "POST INFO"
-//        titleLabel.sizeToFit()
-//        let navigationItems = UINavigationItem(title: titleLabel.text)
-//        navigationItems.titleView = titleLabel
-//        
-//        navigationItems.rightBarButtonItem = cancelButton
-//        navigationBar.items = [navigationItems]
-//    }
-    
     @IBAction func cancelButtonAction(sender: UIButton) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -86,10 +66,6 @@ class OTMInfoPostViewController: UIViewController {
             
         } else {
             
-//            let alertController = UIAlertController(title: "Location", message: "Enter a location! (Mountain View, CA)", preferredStyle: UIAlertControllerStyle.Alert)
-//            let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
-//            alertController.addAction(alertAction)
-            
             let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Location", message: "Enter a location! (Mountain View, CA)", actionTitle: "OK")
             self.presentViewController(alertController, animated: true, completion: nil)
         }
@@ -103,9 +79,15 @@ class OTMInfoPostViewController: UIViewController {
             let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Submit Post", message: "Enter a link!", actionTitle: "OK")
             self.presentViewController(alertController, animated: true, completion: nil)
         } else {
+            
             // post the link
+            OTMClient.sharedInstance().yourLink = self.linkTextField.text!
             OTMClient.sharedInstance().postStudentLocation({ (success, result, errorString) -> Void in
-                <#code#>
+                if success {
+                    println("posting the link: \(result)")
+                } else {
+                    println("error posting: \(errorString)")
+                }
             })
             // then dismiss view
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -122,6 +104,10 @@ class OTMInfoPostViewController: UIViewController {
             } else {
                 let placemark = location.first as! CLPlacemark
                 let coordinates = placemark.location
+                
+                OTMClient.sharedInstance().yourMapString = string
+                OTMClient.sharedInstance().yourCoordinates = coordinates
+                
                 completion(location: coordinates, error: nil)
                 
             }

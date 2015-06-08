@@ -24,7 +24,7 @@ class OTMFacebookDelegate: NSObject, FBSDKLoginButtonDelegate {
         OTMClient.sharedInstance().getFacebookSessionID { (success, sessionID, errorString) -> Void in
             if let session = sessionID {
                 println("session id \(session)")
-                OTMClient.sharedInstance().sessionID = session
+                OTMClient.sharedInstance().sessionID = sessionID
                 
                 // then get the user data
                 OTMClient.sharedInstance().getPublicUserData({ (success, name, errorString) -> Void in

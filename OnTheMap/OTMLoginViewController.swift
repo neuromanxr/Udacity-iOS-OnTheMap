@@ -67,7 +67,10 @@ class OTMLoginViewController: UIViewController {
     
     @IBAction func loginAction(sender: UIButton) {
         
-        if !emailTextField.text.isEmpty || !passwordTextField.text.isEmpty {
+        if !emailTextField.text.isEmpty && !passwordTextField.text.isEmpty {
+            OTMClient.sharedInstance().email = self.emailTextField.text!
+            OTMClient.sharedInstance().pass = self.passwordTextField.text!
+            
             OTMClient.sharedInstance().authenticateWithViewController(self, completionHandler: { (success, errorString) -> Void in
                 if success {
                     println("login success")

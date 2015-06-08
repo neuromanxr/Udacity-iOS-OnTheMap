@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 // methods called when respective navigation bar button tapped
 protocol OTMBarButtonDelegate {
@@ -32,7 +33,15 @@ class OTMClient: NSObject {
     var email: String? = nil
     var pass: String? = nil
     
+    // your info
     var yourName: String? = nil
+    var firstName: String? = nil
+    var lastName: String? = nil
+    var yourCoordinates: CLLocation? = nil
+    var yourLink: String? = nil
+    var yourUniqueKey: String? = nil
+    var yourMapString: String? = nil
+    
     
     // student locations
     var studentLocations = [OTMStudentLocations]()
@@ -129,12 +138,19 @@ class OTMClient: NSObject {
                 completionHandler(result: nil, error: newError)
             } else {
                 
-                println("POST request success \(response)")
-                // skip the first 5 characters in response!
-                let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
-                println("POST request data \(NSString(data: newData, encoding: NSUTF8StringEncoding))")
-                // use the parse json helper
-                OTMClient.parseJSONWithCompletionHandler(newData, completionHandler: completionHandler)
+                // Udacity needs first 5 chars skipped, Parse doesn't
+                if baseURL == Constants.UdacityBaseURL {
+                    // skip the first 5 characters in response!
+                    let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
+                    // use the json helper
+                    OTMClient.parseJSONWithCompletionHandler(newData, completionHandler: completionHandler)
+                    println("POST data string: \(NSString(data: newData, encoding: NSUTF8StringEncoding))")
+                    println("POST Udacity: Post Success: \(response)")
+                } else {
+                    // Parse response
+                    OTMClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
+                    println("POST Parse: Post Success \(response)")
+                }
             }
         })
         task.resume()

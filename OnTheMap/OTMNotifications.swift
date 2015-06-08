@@ -44,10 +44,12 @@ extension OTMClient {
         
         if FBSDKAccessToken.currentAccessToken() != nil {
             FBSDKAccessToken.setCurrentAccessToken(nil)
+            self.sessionID = nil
             println("Facebook: logged out, token cleared")
             NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
         } else {
             println("Facebook: Was not logged in, No token")
+            self.sessionID = nil
             OTMClient.sharedInstance().logoutOfSession { (result, error) -> Void in
                 if let result = result.valueForKey(JSONResponseKeys.SessionID) as? [String: AnyObject] {
                     // tell the delegate the logout button was tapped
@@ -79,8 +81,13 @@ extension OTMClient {
     
     func showInfoPostingView(sender: AnyObject) {
         // tell the delegate to show info post view when pin button tapped
-        println("show info post")
-        self.delegate?.barButtonShowInfoPost()
+        if self.sessionID != nil {
+            println("show info post")
+            self.delegate?.barButtonShowInfoPost()
+        } else {
+            println("not logged in")
+        }
+        
 //        NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationShowInfoPost, object: sender)
     }
     

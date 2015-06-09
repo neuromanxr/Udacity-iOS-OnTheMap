@@ -36,7 +36,6 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loggedIn", name: OTMClient.Constants.NotificationLoggedIn, object: nil)
         
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showInfoPost:", name: OTMClient.Constants.NotificationShowInfoPost, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -52,9 +51,6 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
         NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationLoggedOut, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationLoggedIn, object: nil)
         
-        
-//        NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationShowInfoPost, object: nil)
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,13 +58,6 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
         // Dispose of any resources that can be recreated.
     }
     
-//    func barButtonLogout() {
-//        println("barButton: logged out in map view")
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//            self.navigationItem.leftBarButtonItem?.enabled = false
-//            
-//        })
-//    }
     func barButtonShowLogin() {
         let loginView = self.storyboard!.instantiateViewControllerWithIdentifier("LoginView") as! OTMLoginViewController
         loginView.delegate = self
@@ -130,15 +119,7 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
         })
     }
     
-//    func showInfoPost(sender: AnyObject) {
-//        println("map view SENDER: \(sender)")
-//        
-//        let infoPostViewController = self.storyboard!.instantiateViewControllerWithIdentifier("InfoPostView") as! OTMInfoPostViewController
-//        infoPostViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
-//        self.presentViewController(infoPostViewController, animated: true, completion: nil)
-//    }
-    
-    func updateStudentLocations() {
+    func addStudentAnnotations() {
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             // update UI
@@ -157,20 +138,11 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
         println("loading student data")
         OTMClient.sharedInstance().getStudentLocations { (result, error) -> Void in
             
-//            println("student locations \(result)")
             if let result = result {
                 // got the student locations
-//                println("got student locations \(result)")
+                println("got student locations")
                 
-//                for student in result {
-//                    println("** Object \(student)")
-//                    let studentObject = OTMStudentLocations.parseJSON(student)
-//                    println("* name: \(studentObject.studentName) url: \(studentObject.studentLink) coordinate: \(studentObject.coordinate)")
-//                    OTMClient.sharedInstance().studentLocations.append(studentObject)
-//
-//                }
-                
-                self.updateStudentLocations()
+                self.addStudentAnnotations()
                 
             } else {
                 // couldn't get the student locations

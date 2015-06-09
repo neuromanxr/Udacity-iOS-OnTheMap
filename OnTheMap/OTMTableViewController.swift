@@ -130,7 +130,7 @@ class OTMTableViewController: UITableViewController, OTMBarButtonDelegate, Login
         let studentObject = OTMClient.sharedInstance().studentLocations[indexPath.row]
         
         cell.studentLabel.text = studentObject.studentName
-        cell.pinImage.image = UIImage(named: "")
+        cell.pinImage.image = UIImage(named: "pin")
 
         return cell
     }

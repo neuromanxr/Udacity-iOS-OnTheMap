@@ -9,7 +9,7 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
-// MARK - dsd
+
 protocol LoginViewControllerDelegate {
     func didLoggedIn(status: Bool)
 }
@@ -31,6 +31,7 @@ class OTMLoginViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        setupUI()
         
         // set up the delegates
         facebookLoginButton.delegate = facebookDelegate
@@ -63,6 +64,21 @@ class OTMLoginViewController: UIViewController {
     
     func dismiss() {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func setupUI() {
+        // set the email field background to semi-transparent and the placeholder text opaque
+        self.emailTextField.backgroundColor = UIColor(white: 1.0, alpha: 0.5)
+        self.emailTextField.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSForegroundColorAttributeName: UIColor(white: 1.0, alpha: 1.0)])
+        
+        self.passwordTextField.backgroundColor = UIColor(white: 1.0, alpha: 0.5)
+        self.passwordTextField.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName: UIColor(white: 1.0, alpha: 1.0)])
+        
+        // round out the login button
+        self.loginButton.layer.cornerRadius = 5
+        
+        // get rid of rectangle corners
+        self.facebookLoginButton.backgroundColor = UIColor.clearColor()
     }
     
     @IBAction func loginAction(sender: UIButton) {

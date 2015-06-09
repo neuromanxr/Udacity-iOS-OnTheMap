@@ -24,6 +24,24 @@
 		50CBF4C71B1F9E7300A893A4 /* OTMNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CBF4C61B1F9E7300A893A4 /* OTMNotifications.swift */; };
 		50CBF4C91B20A92900A893A4 /* OTMInfoPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CBF4C81B20A92800A893A4 /* OTMInfoPostViewController.swift */; };
 		50CBF4CB1B20F59900A893A4 /* OTMAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CBF4CA1B20F59900A893A4 /* OTMAlerts.swift */; };
+		50CBF4DD1B258ECD00A893A4 /* list.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4CC1B258ECD00A893A4 /* list.pdf */; };
+		50CBF4DE1B258ECD00A893A4 /* map.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4CD1B258ECD00A893A4 /* map.pdf */; };
+		50CBF4DF1B258ECD00A893A4 /* OnTheMap_29.png in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4CE1B258ECD00A893A4 /* OnTheMap_29.png */; };
+		50CBF4E01B258ECD00A893A4 /* OnTheMap_40.png in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4CF1B258ECD00A893A4 /* OnTheMap_40.png */; };
+		50CBF4E11B258ECD00A893A4 /* OnTheMap_58.png in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4D01B258ECD00A893A4 /* OnTheMap_58.png */; };
+		50CBF4E21B258ECD00A893A4 /* OnTheMap_76.png in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4D11B258ECD00A893A4 /* OnTheMap_76.png */; };
+		50CBF4E31B258ECD00A893A4 /* OnTheMap_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4D21B258ECD00A893A4 /* OnTheMap_80.png */; };
+		50CBF4E41B258ECD00A893A4 /* OnTheMap_120.png in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4D31B258ECD00A893A4 /* OnTheMap_120.png */; };
+		50CBF4E51B258ECD00A893A4 /* OnTheMap_152.png in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4D41B258ECD00A893A4 /* OnTheMap_152.png */; };
+		50CBF4E61B258ECD00A893A4 /* OnTheMap_180.png in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4D51B258ECD00A893A4 /* OnTheMap_180.png */; };
+		50CBF4E71B258ECD00A893A4 /* OnTheMap_512.png in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4D61B258ECD00A893A4 /* OnTheMap_512.png */; };
+		50CBF4E81B258ECD00A893A4 /* OnTheMap_1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4D71B258ECD00A893A4 /* OnTheMap_1024.png */; };
+		50CBF4E91B258ECD00A893A4 /* pin.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4D81B258ECD00A893A4 /* pin.pdf */; };
+		50CBF4EA1B258ECD00A893A4 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4D91B258ECD00A893A4 /* Roboto-Medium.ttf */; };
+		50CBF4EB1B258ECD00A893A4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4DA1B258ECD00A893A4 /* Roboto-Regular.ttf */; };
+		50CBF4EC1B258ECD00A893A4 /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4DB1B258ECD00A893A4 /* Roboto-Thin.ttf */; };
+		50CBF4ED1B258ECD00A893A4 /* udacity.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 50CBF4DC1B258ECD00A893A4 /* udacity.pdf */; };
+		50CBF4F01B264DB600A893A4 /* OTMFormTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CBF4EF1B264DB600A893A4 /* OTMFormTextField.swift */; };
 		50CE8C641B179D290035C27A /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE8C631B179D290035C27A /* FBSDKCoreKit.framework */; };
 		50CE8C661B17A8690035C27A /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE8C651B17A8690035C27A /* FBSDKLoginKit.framework */; };
 		50CE8C681B17C1AF0035C27A /* OTMFacebookDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CE8C671B17C1AF0035C27A /* OTMFacebookDelegate.swift */; };
@@ -62,6 +80,24 @@
 		50CBF4C61B1F9E7300A893A4 /* OTMNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMNotifications.swift; sourceTree = "<group>"; };
 		50CBF4C81B20A92800A893A4 /* OTMInfoPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMInfoPostViewController.swift; sourceTree = "<group>"; };
 		50CBF4CA1B20F59900A893A4 /* OTMAlerts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMAlerts.swift; sourceTree = "<group>"; };
+		50CBF4CC1B258ECD00A893A4 /* list.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = list.pdf; sourceTree = "<group>"; };
+		50CBF4CD1B258ECD00A893A4 /* map.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = map.pdf; sourceTree = "<group>"; };
+		50CBF4CE1B258ECD00A893A4 /* OnTheMap_29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnTheMap_29.png; sourceTree = "<group>"; };
+		50CBF4CF1B258ECD00A893A4 /* OnTheMap_40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnTheMap_40.png; sourceTree = "<group>"; };
+		50CBF4D01B258ECD00A893A4 /* OnTheMap_58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnTheMap_58.png; sourceTree = "<group>"; };
+		50CBF4D11B258ECD00A893A4 /* OnTheMap_76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnTheMap_76.png; sourceTree = "<group>"; };
+		50CBF4D21B258ECD00A893A4 /* OnTheMap_80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnTheMap_80.png; sourceTree = "<group>"; };
+		50CBF4D31B258ECD00A893A4 /* OnTheMap_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnTheMap_120.png; sourceTree = "<group>"; };
+		50CBF4D41B258ECD00A893A4 /* OnTheMap_152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnTheMap_152.png; sourceTree = "<group>"; };
+		50CBF4D51B258ECD00A893A4 /* OnTheMap_180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnTheMap_180.png; sourceTree = "<group>"; };
+		50CBF4D61B258ECD00A893A4 /* OnTheMap_512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnTheMap_512.png; sourceTree = "<group>"; };
+		50CBF4D71B258ECD00A893A4 /* OnTheMap_1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnTheMap_1024.png; sourceTree = "<group>"; };
+		50CBF4D81B258ECD00A893A4 /* pin.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = pin.pdf; sourceTree = "<group>"; };
+		50CBF4D91B258ECD00A893A4 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		50CBF4DA1B258ECD00A893A4 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		50CBF4DB1B258ECD00A893A4 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
+		50CBF4DC1B258ECD00A893A4 /* udacity.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = udacity.pdf; sourceTree = "<group>"; };
+		50CBF4EF1B264DB600A893A4 /* OTMFormTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMFormTextField.swift; sourceTree = "<group>"; };
 		50CE8C631B179D290035C27A /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		50CE8C651B17A8690035C27A /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		50CE8C671B17C1AF0035C27A /* OTMFacebookDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMFacebookDelegate.swift; sourceTree = "<group>"; };
@@ -121,12 +157,14 @@
 				50B29C6E1B0E4310000742AE /* OTMTableViewController.swift */,
 				50CBF4C21B1F5C8C00A893A4 /* OTMTableViewCell.swift */,
 				50B29C701B0E44F4000742AE /* OTMLoginViewController.swift */,
+				50CBF4EF1B264DB600A893A4 /* OTMFormTextField.swift */,
 				50CE8C691B1D0EA10035C27A /* OTMLoginTextFieldDelegate.swift */,
 				50CE8C671B17C1AF0035C27A /* OTMFacebookDelegate.swift */,
 				50CBF4C81B20A92800A893A4 /* OTMInfoPostViewController.swift */,
 				50B29C521B0E3888000742AE /* Main.storyboard */,
 				50B29C551B0E3888000742AE /* Images.xcassets */,
 				50B29C571B0E3888000742AE /* LaunchScreen.xib */,
+				50CBF4EE1B258ED900A893A4 /* Assets */,
 				50CE8C621B179CF20035C27A /* Frameworks */,
 				50B29C4C1B0E3888000742AE /* Supporting Files */,
 			);
@@ -156,6 +194,30 @@
 				50B29C631B0E3888000742AE /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		50CBF4EE1B258ED900A893A4 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				50CBF4CC1B258ECD00A893A4 /* list.pdf */,
+				50CBF4CD1B258ECD00A893A4 /* map.pdf */,
+				50CBF4CE1B258ECD00A893A4 /* OnTheMap_29.png */,
+				50CBF4CF1B258ECD00A893A4 /* OnTheMap_40.png */,
+				50CBF4D01B258ECD00A893A4 /* OnTheMap_58.png */,
+				50CBF4D11B258ECD00A893A4 /* OnTheMap_76.png */,
+				50CBF4D21B258ECD00A893A4 /* OnTheMap_80.png */,
+				50CBF4D31B258ECD00A893A4 /* OnTheMap_120.png */,
+				50CBF4D41B258ECD00A893A4 /* OnTheMap_152.png */,
+				50CBF4D51B258ECD00A893A4 /* OnTheMap_180.png */,
+				50CBF4D61B258ECD00A893A4 /* OnTheMap_512.png */,
+				50CBF4D71B258ECD00A893A4 /* OnTheMap_1024.png */,
+				50CBF4D81B258ECD00A893A4 /* pin.pdf */,
+				50CBF4D91B258ECD00A893A4 /* Roboto-Medium.ttf */,
+				50CBF4DA1B258ECD00A893A4 /* Roboto-Regular.ttf */,
+				50CBF4DB1B258ECD00A893A4 /* Roboto-Thin.ttf */,
+				50CBF4DC1B258ECD00A893A4 /* udacity.pdf */,
+			);
+			name = Assets;
 			sourceTree = "<group>";
 		};
 		50CE8C621B179CF20035C27A /* Frameworks */ = {
@@ -248,9 +310,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50CBF4DE1B258ECD00A893A4 /* map.pdf in Resources */,
+				50CBF4E81B258ECD00A893A4 /* OnTheMap_1024.png in Resources */,
+				50CBF4DD1B258ECD00A893A4 /* list.pdf in Resources */,
+				50CBF4EA1B258ECD00A893A4 /* Roboto-Medium.ttf in Resources */,
+				50CBF4E11B258ECD00A893A4 /* OnTheMap_58.png in Resources */,
 				50B29C541B0E3888000742AE /* Main.storyboard in Resources */,
+				50CBF4EB1B258ECD00A893A4 /* Roboto-Regular.ttf in Resources */,
+				50CBF4E71B258ECD00A893A4 /* OnTheMap_512.png in Resources */,
+				50CBF4E91B258ECD00A893A4 /* pin.pdf in Resources */,
+				50CBF4E21B258ECD00A893A4 /* OnTheMap_76.png in Resources */,
 				50B29C591B0E3888000742AE /* LaunchScreen.xib in Resources */,
+				50CBF4E41B258ECD00A893A4 /* OnTheMap_120.png in Resources */,
+				50CBF4DF1B258ECD00A893A4 /* OnTheMap_29.png in Resources */,
+				50CBF4E31B258ECD00A893A4 /* OnTheMap_80.png in Resources */,
+				50CBF4ED1B258ECD00A893A4 /* udacity.pdf in Resources */,
+				50CBF4EC1B258ECD00A893A4 /* Roboto-Thin.ttf in Resources */,
 				50B29C561B0E3888000742AE /* Images.xcassets in Resources */,
+				50CBF4E61B258ECD00A893A4 /* OnTheMap_180.png in Resources */,
+				50CBF4E51B258ECD00A893A4 /* OnTheMap_152.png in Resources */,
+				50CBF4E01B258ECD00A893A4 /* OnTheMap_40.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +361,7 @@
 				50CBF4C51B1F690E00A893A4 /* OTMMapViewController.swift in Sources */,
 				50B29C771B0E68AA000742AE /* OTMConvenience.swift in Sources */,
 				50CBF4C91B20A92900A893A4 /* OTMInfoPostViewController.swift in Sources */,
+				50CBF4F01B264DB600A893A4 /* OTMFormTextField.swift in Sources */,
 				50CBF4CB1B20F59900A893A4 /* OTMAlerts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

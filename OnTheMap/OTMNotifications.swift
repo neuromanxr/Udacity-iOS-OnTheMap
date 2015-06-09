@@ -20,8 +20,10 @@ extension OTMClient {
     func setupNavigationItem(item: UINavigationItem) -> Void {
         item.title = "On The Map"
         let logoutButton = UIBarButtonItem(title: "Logout", style: UIBarButtonItemStyle.Plain, target: self, action: "logout")
-        let reloadButton = UIBarButtonItem(title: "Reload", style: UIBarButtonItemStyle.Plain, target: self, action: "postNotificationReloadData")
-        let pinButton = UIBarButtonItem(title: "Pin", style: UIBarButtonItemStyle.Plain, target: self, action: "showInfoPostingView:")
+//        let reloadButton = UIBarButtonItem(title: "Reload", style: UIBarButtonItemStyle.Plain, target: self, action: "postNotificationReloadData")
+        let reloadButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Refresh, target: self, action: "postNotificationReloadData")
+//        let pinButton = UIBarButtonItem(title: "Pin", style: UIBarButtonItemStyle.Plain, target: self, action: "showInfoPostingView:")
+        let pinButton = UIBarButtonItem(image: UIImage(named: "pin"), style: UIBarButtonItemStyle.Done, target: self, action: "showInfoPostingView:")
         item.rightBarButtonItems = [reloadButton ,pinButton]
         item.leftBarButtonItem = logoutButton
         

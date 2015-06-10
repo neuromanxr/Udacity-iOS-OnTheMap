@@ -11,7 +11,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelegate {
 
     var window: UIWindow?
     
@@ -25,9 +25,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FBSDKLoginButton()
         
-//        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        showInitialView()
 
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+    }
+    
+    func didLoggedIn(status: Bool) {
+        println("logged in")
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let mainView = mainStoryboard.instantiateViewControllerWithIdentifier("MainView") as! UITabBarController
+            let rootViewController = self.window?.rootViewController as! UINavigationController
+            rootViewController.setViewControllers([mainView], animated: true)
+        })
+    }
+    
+    func showInitialView() {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let mainView = mainStoryboard.instantiateViewControllerWithIdentifier("MainView") as! UITabBarController
+        OTMClient.sharedInstance().delegate = OTMLogin.sharedInstance()
+        let rootViewController = UINavigationController(rootViewController: mainView)
+        self.window?.rootViewController = rootViewController
+        
+        if OTMClient.sharedInstance().sessionID != nil {
+            // already logged in
+            rootViewController.setViewControllers([mainView], animated: true)
+            
+        } else {
+            // show login
+            let loginView = mainStoryboard.instantiateViewControllerWithIdentifier("LoginView") as! OTMLoginViewController
+            loginView.delegate = OTMLogin.sharedInstance()
+            rootViewController.setViewControllers([loginView], animated: false)
+        }
     }
 
     func applicationWillResignActive(application: UIApplication) {

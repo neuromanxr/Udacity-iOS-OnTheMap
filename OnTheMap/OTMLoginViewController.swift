@@ -24,9 +24,9 @@ class OTMLoginViewController: UIViewController {
     
     let facebookDelegate = OTMFacebookDelegate()
     let loginTextFieldDelegate = OTMLoginTextFieldDelegate()
-    
+
     var delegate: LoginViewControllerDelegate?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -67,6 +67,8 @@ class OTMLoginViewController: UIViewController {
     }
     
     func setupUI() {
+        
+        self.navigationController?.navigationBar.hidden = true
         // set the email field background to semi-transparent and the placeholder text opaque
         self.emailTextField.backgroundColor = UIColor(white: 1.0, alpha: 0.5)
         self.emailTextField.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSForegroundColorAttributeName: UIColor(white: 1.0, alpha: 1.0)])
@@ -91,11 +93,11 @@ class OTMLoginViewController: UIViewController {
                 if success {
                     println("login success")
                     // tell map view we are logged in, so load the student locations
-                    self.delegate?.didLoggedIn(true)
                     // logged in, change the left bar button to logout
                     NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedIn, object: nil)
                     
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    self.delegate?.didLoggedIn(true)
+
                 } else {
                     println("login error \(errorString)")
                     let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Login", message: "Invalid Login!", actionTitle: "OK")
@@ -112,14 +114,5 @@ class OTMLoginViewController: UIViewController {
         let signUpURL = NSURL(string: "https://www.google.com/url?q=https%3A%2F%2Fwww.udacity.com%2Faccount%2Fauth%23!%2Fsignin&sa=D&sntz=1&usg=AFQjCNERmggdSkRb9MFkqAW_5FgChiCxAQ")
         UIApplication.sharedApplication().openURL(signUpURL!)
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

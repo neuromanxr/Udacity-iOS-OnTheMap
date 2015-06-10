@@ -10,6 +10,8 @@ import UIKit
 import MapKit
 
 class OTMInfoPostViewController: UIViewController {
+    // 51, 102, 153
+    let color = UIColor(red: 51.0/255, green: 102.0/255, blue: 153.0/255, alpha: 1.0)
     
     @IBOutlet weak var topBarView: UIView!
     // study prompt
@@ -31,12 +33,22 @@ class OTMInfoPostViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        setupUI()
         
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func setupUI() {
+        self.linkTextField.attributedPlaceholder = NSAttributedString(string: "Enter link", attributes: [NSForegroundColorAttributeName: UIColor(white: 1.0, alpha: 0.6)])
+        self.locationTextField.attributedPlaceholder = NSAttributedString(string: "Enter location (New York)", attributes: [NSForegroundColorAttributeName: UIColor(white: 1.0, alpha: 0.6)])
+        
+        self.submitButton.layer.cornerRadius = 5.0
+        self.bottomBarButton.layer.cornerRadius = 5.0
+        
     }
     
     @IBAction func cancelButtonAction(sender: UIButton) {
@@ -87,6 +99,8 @@ class OTMInfoPostViewController: UIViewController {
                     println("posting the link: \(result)")
                 } else {
                     println("error posting: \(errorString)")
+                    let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Submit Post", message: "Post submission failed!", actionTitle: "OK")
+                    self.presentViewController(alertController, animated: true, completion: nil)
                 }
             })
             // then dismiss view
@@ -99,8 +113,10 @@ class OTMInfoPostViewController: UIViewController {
         CLGeocoder().geocodeAddressString(string) { (location: [AnyObject]!, error: NSError!) -> Void in
 //            println("geocode \(location)")
             if let error = error {
-                println("error in function \(error)")
+                println("error geocoding in function \(error)")
                 completion(location: nil, error: error)
+                let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Geocoding", message: "Couldn't get the coordinates!", actionTitle: "OK")
+                self.presentViewController(alertController, animated: true, completion: nil)
             } else {
                 let placemark = location.first as! CLPlacemark
                 let coordinates = placemark.location
@@ -116,7 +132,7 @@ class OTMInfoPostViewController: UIViewController {
     
     func revealMap() {
         UIView.animateWithDuration(1.0, animations: { () -> Void in
-            self.topBarView.backgroundColor = UIColor.blueColor()
+            self.topBarView.backgroundColor = self.color
             self.middleBarView.alpha = 0.0
             
             self.bottomBarButton.alpha = 0.0
@@ -127,6 +143,7 @@ class OTMInfoPostViewController: UIViewController {
             self.topBarLabel.alpha = 0.0
             self.topBarLabelBold.alpha = 0.0
             self.topBarLabelQuestion.alpha = 0.0
+            self.topBarCancelButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
             
         })
         self.linkTextField.enabled = true
@@ -143,14 +160,5 @@ class OTMInfoPostViewController: UIViewController {
         let myPost = OTMStudentLocations(title: yourName!, studentName: yourName!, studentLink: "link", coordinate: location.coordinate)
         self.mapView.addAnnotation(myPost)
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

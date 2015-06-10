@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import FBSDKLoginKit
 
-class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBarButtonDelegate {
+class OTMMapViewController: UIViewController /*LoginViewControllerDelegate*/ {
 
     @IBOutlet weak var mapView: MKMapView!
     
@@ -20,7 +20,7 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         mapView.delegate = self
-        OTMClient.sharedInstance().delegate = self
+//        OTMClient.sharedInstance().delegate = self
         
         OTMClient.sharedInstance().setupNavigationItem(self.navigationItem)
         
@@ -28,20 +28,23 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
         
         
         // listen for notifications
+        // load initial student data
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadStudentLocations", name: OTMClient.Constants.NotificationLoadStudents, object: nil)
-        
+        // reload student data after reload button tap
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadStudentLocations", name: OTMClient.Constants.NotificationReload, object: nil)
-        
+        // user logged out
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loggedOut", name: OTMClient.Constants.NotificationLoggedOut, object: nil)
-        
+        // user logged in
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loggedIn", name: OTMClient.Constants.NotificationLoggedIn, object: nil)
+        // show alert when trying to post when not logged in
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "infoPostAlert", name: OTMClient.Constants.NotificationInfoPostAlert, object: nil)
         
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        self.login()
+//        self.login()
     }
     
     deinit {
@@ -50,6 +53,7 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
         NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationReload, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationLoggedOut, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationLoggedIn, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationInfoPostAlert, object: nil)
         
     }
 
@@ -58,45 +62,55 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
         // Dispose of any resources that can be recreated.
     }
     
-    func barButtonShowLogin() {
-        let loginView = self.storyboard!.instantiateViewControllerWithIdentifier("LoginView") as! OTMLoginViewController
-        loginView.delegate = self
-        self.presentViewController(loginView, animated: false, completion: nil)
-    }
+//    func barButtonShowLogin() {
+//        
+//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//            let loginView = self.storyboard!.instantiateViewControllerWithIdentifier("LoginView") as! OTMLoginViewController
+////            loginView.delegate = self
+//            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+//            let rootViewController = appDelegate.window?.rootViewController as! UINavigationController
+//            rootViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
+//            rootViewController.setViewControllers([loginView], animated: true)
+//        })
+//        println("bar button show login")
+//    }
     
-    func barButtonShowInfoPost() {
-        println("barButton: info post presented in map view")
-        let infoPostViewController = self.storyboard!.instantiateViewControllerWithIdentifier("InfoPostView") as! OTMInfoPostViewController
-        infoPostViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
-        // getting a 'Presenting view controller on a detached view controllers is discouraged' without presenting from rootViewController
-        self.view.window!.rootViewController!.presentViewController(infoPostViewController, animated: true, completion: nil)
-    }
+//    func barButtonShowInfoPost() {
+//        println("barButton: info post presented in map view")
+//        let infoPostViewController = self.storyboard!.instantiateViewControllerWithIdentifier("InfoPostView") as! OTMInfoPostViewController
+//        infoPostViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
+//        // getting a 'Presenting view controller on a detached view controllers is discouraged' without presenting from rootViewController
+//        self.view.window!.rootViewController!.presentViewController(infoPostViewController, animated: true, completion: nil)
+//    }
     
     func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
         mapView.setRegion(coordinateRegion, animated: true)
     }
-    // delete
-    func didLoggedIn(status: Bool) {
-        // if we are logged in, load the student locations
-        if status {
-            self.loadStudentLocations()
-        } else {
-            println("not logged in, don't get student locations")
-        }
-    }
+    
+//    func didLoggedIn(status: Bool) {
+//        println("logged in")
+//        
+//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//            let mainView = mainStoryboard.instantiateViewControllerWithIdentifier("MainView") as! UITabBarController
+//            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+//            let rootViewController = appDelegate.window?.rootViewController as! UINavigationController
+//            rootViewController.setViewControllers([mainView], animated: true)
+//        })
+//    }
     
     func login() -> Void {
         
         // login if there's no session id
-        if OTMClient.sharedInstance().sessionID != nil {
+        if OTMClient.sharedInstance().sessionID != nil || FBSDKAccessToken.currentAccessToken() != nil {
             
             println("didFinish session: \(OTMClient.sharedInstance().sessionID), \(FBSDKAccessToken.currentAccessToken()?.tokenString)")
         } else {
             println("didFinish no session, login")
             
             let loginView = self.storyboard!.instantiateViewControllerWithIdentifier("LoginView") as! OTMLoginViewController
-            loginView.delegate = self
+            
             self.presentViewController(loginView, animated: false, completion: nil)
         }
     }
@@ -117,6 +131,11 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
 
             OTMClient.sharedInstance().swapLeftBarButton(barButtonType.logout, item: self.navigationItem)
         })
+    }
+    
+    func infoPostAlert() {
+        let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Post Info", message: "Login before you post!", actionTitle: "OK")
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     func addStudentAnnotations() {
@@ -147,6 +166,8 @@ class OTMMapViewController: UIViewController, LoginViewControllerDelegate, OTMBa
             } else {
                 // couldn't get the student locations
                 println("didn't get student locations \(error)")
+                let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Student Information", message: "Didn't get the student info", actionTitle: "OK")
+                self.presentViewController(alertController, animated: true, completion: nil)
             }
         }
     }

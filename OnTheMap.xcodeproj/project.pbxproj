@@ -46,6 +46,8 @@
 		50CE8C661B17A8690035C27A /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CE8C651B17A8690035C27A /* FBSDKLoginKit.framework */; };
 		50CE8C681B17C1AF0035C27A /* OTMFacebookDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CE8C671B17C1AF0035C27A /* OTMFacebookDelegate.swift */; };
 		50CE8C6A1B1D0EA10035C27A /* OTMLoginTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CE8C691B1D0EA10035C27A /* OTMLoginTextFieldDelegate.swift */; };
+		50E2B1961B2795850086AFEA /* OTMLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E2B1951B2795850086AFEA /* OTMLogin.swift */; };
+		50E2B1981B27CF810086AFEA /* OTMActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E2B1971B27CF810086AFEA /* OTMActivityIndicator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +104,8 @@
 		50CE8C651B17A8690035C27A /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		50CE8C671B17C1AF0035C27A /* OTMFacebookDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMFacebookDelegate.swift; sourceTree = "<group>"; };
 		50CE8C691B1D0EA10035C27A /* OTMLoginTextFieldDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMLoginTextFieldDelegate.swift; sourceTree = "<group>"; };
+		50E2B1951B2795850086AFEA /* OTMLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMLogin.swift; sourceTree = "<group>"; };
+		50E2B1971B27CF810086AFEA /* OTMActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMActivityIndicator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,10 +150,12 @@
 			isa = PBXGroup;
 			children = (
 				50B29C4E1B0E3888000742AE /* AppDelegate.swift */,
+				50E2B1971B27CF810086AFEA /* OTMActivityIndicator.swift */,
 				50B29C721B0E507F000742AE /* OTMClient.swift */,
 				50CBF4C61B1F9E7300A893A4 /* OTMNotifications.swift */,
 				50CBF4CA1B20F59900A893A4 /* OTMAlerts.swift */,
 				50B29C761B0E68AA000742AE /* OTMConvenience.swift */,
+				50E2B1951B2795850086AFEA /* OTMLogin.swift */,
 				50B29C741B0E56D5000742AE /* OTMConstants.swift */,
 				506FC5B21B1E5CFC00ABA812 /* OTMStudentLocations.swift */,
 				506FC5B41B1E645400ABA812 /* OTMMapViewDelegate.swift */,
@@ -362,6 +368,8 @@
 				50B29C771B0E68AA000742AE /* OTMConvenience.swift in Sources */,
 				50CBF4C91B20A92900A893A4 /* OTMInfoPostViewController.swift in Sources */,
 				50CBF4F01B264DB600A893A4 /* OTMFormTextField.swift in Sources */,
+				50E2B1981B27CF810086AFEA /* OTMActivityIndicator.swift in Sources */,
+				50E2B1961B2795850086AFEA /* OTMLogin.swift in Sources */,
 				50CBF4CB1B20F59900A893A4 /* OTMAlerts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -32,6 +32,7 @@ extension OTMClient {
         static let NotificationFacebookLoggedIn: String = "FacebookDidLogin"
         static let NotificationLoggedIn: String = "LoggedIn"
         static let NotificationLoadStudents: String = "LoadStudents"
+        static let NotificationInfoPostAlert: String = "InfoPostAlert"
     }
     
     // MARK: Methods

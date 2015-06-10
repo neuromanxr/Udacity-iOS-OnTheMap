@@ -11,7 +11,7 @@ import MapKit
 
 // methods called when respective navigation bar button tapped
 protocol OTMBarButtonDelegate {
-//    func barButtonLogout()
+
     func barButtonShowInfoPost()
     func barButtonShowLogin()
 }
@@ -264,5 +264,32 @@ class OTMClient: NSObject {
         
         return (!urlVars.isEmpty ? "?" : "") + join("&", urlVars)
     }
-   
+    
+    class func storeSession(sessionID: String) {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(sessionID, forKey: JSONResponseKeys.SessionID)
+    }
+    
+    class func deleteSession() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.removeObjectForKey(JSONResponseKeys.SessionID)
+    }
+    
+    class func getSession() -> String {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        return defaults.objectForKey(JSONResponseKeys.SessionID) as! String
+    }
+    
+    func clearSession() {
+        self.sessionID = nil
+        self.email = nil
+        self.pass = nil
+        self.yourName = nil
+        self.firstName = nil
+        self.lastName = nil
+        self.yourCoordinates = nil
+        self.yourLink = nil
+        self.yourUniqueKey = nil
+        self.yourMapString = nil
+    }
 }

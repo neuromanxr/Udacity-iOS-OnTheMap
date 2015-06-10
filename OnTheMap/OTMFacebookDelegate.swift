@@ -23,8 +23,9 @@ class OTMFacebookDelegate: NSObject, FBSDKLoginButtonDelegate {
         // get the session id through facebook
         OTMClient.sharedInstance().getFacebookSessionID { (success, sessionID, errorString) -> Void in
             if let session = sessionID {
+                
                 println("session id \(session)")
-                OTMClient.sharedInstance().sessionID = sessionID
+                OTMClient.sharedInstance().sessionID = session
                 
                 // then get the user data
                 OTMClient.sharedInstance().getPublicUserData({ (success, name, errorString) -> Void in
@@ -57,7 +58,8 @@ class OTMFacebookDelegate: NSObject, FBSDKLoginButtonDelegate {
         NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationFacebookLoggedIn, object: nil)
         
         if OTMClient.sharedInstance().sessionID != nil {
-            OTMClient.sharedInstance().sessionID = nil
+            
+            OTMClient.sharedInstance().clearSession()
             println("session id cleared \(OTMClient.sharedInstance().sessionID)")
         } else {
             println("session id wasn't cleared \(OTMClient.sharedInstance().sessionID)")

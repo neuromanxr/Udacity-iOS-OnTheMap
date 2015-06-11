@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 Kelvin. All rights reserved.
 //
 
-import UIKit
-import Foundation
 import FBSDKLoginKit
 
 extension OTMClient {
@@ -18,14 +16,17 @@ extension OTMClient {
         // get the session id first
         self.getSessionID { (success, sessionID, errorString) -> Void in
             if success {
-                self.sessionID = sessionID
+                // delete login info
+                self.email = nil
+                self.pass = nil
+                
                 println("auth session id \(self.sessionID)")
                 // then get the user data using the session id (user_id)
-                self.getPublicUserData({ (success, name, errorString) -> Void in
+                self.getPublicUserData({ (success, userData, errorString) -> Void in
                     if success {
                         // store your name for this session
-                        self.yourName = name
-                        println("success got user data \(self.yourName)")
+//                        self.yourName = name
+                        println("success got user data")
                         completionHandler(success: success, errorString: errorString)
                     } else {
                         completionHandler(success: success, errorString: errorString)
@@ -70,7 +71,7 @@ extension OTMClient {
     // MARK: - GET
     
     // MARK: -PARSE - get the student locations from Parse
-    func getStudentLocations(completionHandler: (result: [[String: AnyObject]]?, error: NSError?) -> Void) {
+    func getStudentLocations(completionHandler: (result: [OTMStudentInformation]?, error: NSError?) -> Void) {
         // specify parameters
         // set the max student locations to 100
         let parameters = [OTMClient.ParameterKeys.MaxStudentLocations: OTMClient.Constants.MaxStudentLocationsValue]
@@ -89,21 +90,25 @@ extension OTMClient {
                 // got the json result
                 println("GET student locations: got the json")
                 if let results = result.valueForKey(JSONResponseKeys.Results) as? [[String: AnyObject]] {
+                    
+                    // create student information objects and store it in student data singleton
+                    var students = OTMStudentInformation.studentFromResults(results)
+                    OTMStudentData.sharedInstance().studentObjects = students
                     // parsed the json result
-                    completionHandler(result: results, error: nil)
+                    completionHandler(result: students, error: nil)
 //                    println("student locations: got the result \(results)")
                     
                     // clear the original data first
-                    OTMClient.sharedInstance().studentLocations = [OTMStudentLocations]()
+//                    OTMClient.sharedInstance().studentLocations = [OTMStudentLocations]()
                     
-                    for student in results {
+//                    for student in results {
 //                        println("** Object \(student)")
-                        let studentObject = OTMStudentLocations.parseJSON(student)
+//                        let studentObject = OTMStudentLocations.parseJSON(student)
 //                        println("* name: \(studentObject.studentName) url: \(studentObject.studentLink) coordinate: \(studentObject.coordinate)")
-                        OTMClient.sharedInstance().studentLocations.append(studentObject)
-                        
-                    }
-                    println("student locations array \(OTMClient.sharedInstance().studentLocations.count)")
+//                        OTMClient.sharedInstance().studentLocations.append(studentObject)
+                    
+//                    }
+                    println("student locations array \(students.count)")
                     
                 } else {
                     // couldn't parse the json result
@@ -146,7 +151,7 @@ extension OTMClient {
     }
     
     // MARK: -UDACITY - get the public user data from Udacity
-    func getPublicUserData(completionHandler: (success: Bool, name: String?, errorString: String?) -> Void) {
+    func getPublicUserData(completionHandler: (success: Bool, userData: [String: AnyObject], errorString: String?) -> Void) {
         // specify parameters
         var parameters = [String: AnyObject]()
         // there's no header field
@@ -159,7 +164,7 @@ extension OTMClient {
         taskForGETMethod(Constants.UdacityBaseURL, method: mutableMethod, parameters: parameters, requestValues: requestValues) { (result, error) -> Void in
             if let error = error {
                 // there was an error in the request
-                completionHandler(success: false, name: nil, errorString: "request error: get public user data failed")
+                completionHandler(success: false, userData: [String: AnyObject](), errorString: "request error: get public user data failed")
             } else {
                 // got the json result
 //                println("user data results \(result)")
@@ -168,13 +173,17 @@ extension OTMClient {
                     // get your name
                     let firstName = results["first_name"] as? String
                     let lastName = results["last_name"] as? String
-                    let yourName = "\(firstName!) \(lastName!)"
+                    
+                    OTMStudentData.sharedInstance().studentPost = OTMStudentPost(firstName: firstName!, lastName: lastName!)
+                    
+                    
+//                    let yourName = "\(firstName!) \(lastName!)"
 //                    println("GET: user data results \(yourName)")
                     // parsed the json result
-                    completionHandler(success:true, name: yourName, errorString: nil)
+                    completionHandler(success:true, userData: results, errorString: nil)
                 } else {
                     // couldn't parse the json result
-                    completionHandler(success: false, name: nil, errorString: "couldn't parse result: get public user data failed")
+                    completionHandler(success: false, userData: [String: AnyObject](), errorString: "couldn't parse result: get public user data failed")
                 }
             }
         }
@@ -240,8 +249,9 @@ extension OTMClient {
                 completionHandler(success: false, sessionID: nil, errorString: "login failed (facebook session id)")
             } else {
                 if let session = result.valueForKey("account")?.valueForKey("key") as? String {
+                    // save the session
                     println("session id \(session)")
-
+                    self.sessionID = session
                     completionHandler(success: true, sessionID: session, errorString: nil)
                 } else {
                     completionHandler(success: false, sessionID: nil, errorString: "couldn't parse results. login failed (facebook session id)")
@@ -273,6 +283,8 @@ extension OTMClient {
             } else {
                 if let session = result.valueForKey("account")?.valueForKey("key") as? String {
                     println("session id \(session)")
+                    // save the session
+                    self.sessionID = session
                     completionHandler(success: true, sessionID: session, errorString: nil)
                 } else {
                     completionHandler(success: false, sessionID: nil, errorString: "couldn't parse session id")
@@ -296,13 +308,25 @@ extension OTMClient {
         ]
         
         // json body
-        let firstName = OTMClient.sharedInstance().yourName!.componentsSeparatedByString(" ").first
-        let lastName = OTMClient.sharedInstance().yourName!.componentsSeparatedByString(" ").last
-        let mapString = OTMClient.sharedInstance().yourMapString!
-        let location = OTMClient.sharedInstance().yourCoordinates!
-        let url = OTMClient.sharedInstance().yourLink!
+        let firstName = OTMStudentData.sharedInstance().studentPost!.yourFirstName
+        let lastName = OTMStudentData.sharedInstance().studentPost!.yourLastName
+        let mapString = OTMStudentData.sharedInstance().studentPost!.yourMapString
+        let latitude = OTMStudentData.sharedInstance().studentPost!.yourCoordinates?.coordinate.latitude
+        let longitude = OTMStudentData.sharedInstance().studentPost!.yourCoordinates?.coordinate.longitude
+        let url = OTMStudentData.sharedInstance().studentPost!.yourLink
+        let uniqueKey = OTMStudentData.sharedInstance().studentPost!.yourUniqueKey
         
-        let jsonBody: [String: AnyObject] = ["uniqueKey": "8888", "firstName": firstName!, "lastName": lastName!, "mapString": mapString, "mediaURL": url, "latitude": location.coordinate.latitude, "longitude": location.coordinate.longitude]
+        println("JSON BODY: \(firstName)")
+        
+        let jsonBody: [String: AnyObject] = [
+            JSONBodyKeys.keyUniqueKey: uniqueKey as String,
+            JSONBodyKeys.keyFirstName: firstName as String,
+            JSONBodyKeys.keyLastName: lastName as String,
+            JSONBodyKeys.keyMapString: mapString as String,
+            JSONBodyKeys.keyURL: url as String!,
+            JSONBodyKeys.keyLatitude: latitude as Double!,
+            JSONBodyKeys.keyLongitude: longitude as Double!
+        ]
         
         // make the request
         taskForPOSTMethod(Constants.ParseBaseURL, method: Methods.StudentLocations, parameters: parameters, requestValues: requestValues, jsonBody: jsonBody) { (result, error) -> Void in

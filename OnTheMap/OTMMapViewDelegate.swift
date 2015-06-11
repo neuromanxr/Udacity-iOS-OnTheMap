@@ -12,7 +12,7 @@ import UIKit
 extension OTMMapViewController: MKMapViewDelegate {
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
-        if let annotation = annotation as? OTMStudentLocations {
+        if let annotation = annotation as? OTMStudentAnnotation {
             let identifier = "pin"
             var view: MKAnnotationView
             if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
@@ -31,7 +31,7 @@ extension OTMMapViewController: MKMapViewDelegate {
     
     func mapView(mapView: MKMapView!, annotationView view: MKAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
         // get the annotation tapped
-        let studentObject = view.annotation as? OTMStudentLocations
+        let studentObject = view.annotation as? OTMStudentAnnotation
         println("student url \(studentObject?.studentLink)")
         // open the url in Safari
         let studentURL = NSURL(string: studentObject?.studentLink as String!)

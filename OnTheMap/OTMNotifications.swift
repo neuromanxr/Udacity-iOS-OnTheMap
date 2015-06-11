@@ -17,7 +17,8 @@ enum barButtonType: Int {
 extension OTMClient {
     
     // setup the shared navigation bar
-    func setupNavigationItem(item: UINavigationItem) -> Void {
+    func setupNavigationItem(item: UINavigationItem) {
+        println("Running Setup NAVIGATION ITEM \(item)")
         item.title = "On The Map"
         let logoutButton = UIBarButtonItem(title: "Logout", style: UIBarButtonItemStyle.Plain, target: self, action: "logout")
 
@@ -29,6 +30,7 @@ extension OTMClient {
         item.leftBarButtonItem = logoutButton
         
         self.navigationItem = item
+        
     }
     
     func swapLeftBarButton(button: barButtonType, item: UINavigationItem) {
@@ -44,23 +46,27 @@ extension OTMClient {
     }
     
     func logout() {
-        
+        // if logged in facebook
         if FBSDKAccessToken.currentAccessToken() != nil {
-            // clear session
+            // clear facebook token
             FBSDKAccessToken.setCurrentAccessToken(nil)
+            // and clear session
             self.clearSession()
             
             println("Facebook: logged out, token cleared")
             NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
         } else {
-            println("Facebook: Was not logged in, No token")
+            // if logged in udacity
+            println("Udacity: logged out, session cleared")
+            // clear session locally
             self.clearSession()
-            
+            // delete session at udacity
             OTMClient.sharedInstance().logoutOfSession { (result, error) -> Void in
                 if let result = result.valueForKey(JSONResponseKeys.SessionID) as? [String: AnyObject] {
 
                     println("barButton: Logout \(result)")
                     
+                    // send notification to update ui in view controllers
                     NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
                 } else {
                     println("Logout: error")

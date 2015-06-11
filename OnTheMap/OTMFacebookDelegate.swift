@@ -25,14 +25,13 @@ class OTMFacebookDelegate: NSObject, FBSDKLoginButtonDelegate {
             if let session = sessionID {
                 
                 println("session id \(session)")
-                OTMClient.sharedInstance().sessionID = session
+                OTMClient.storeSession(session)
+                OTMClient.sharedInstance().sessionID = OTMClient.getSession()
                 
                 // then get the user data
-                OTMClient.sharedInstance().getPublicUserData({ (success, name, errorString) -> Void in
+                OTMClient.sharedInstance().getPublicUserData({ (success, results, errorString) -> Void in
                     if success {
-                        println("success got user data \(name!)")
-                        // store your name for this session
-                        OTMClient.sharedInstance().yourName = name
+                        println("success got user data \(results)")
                         
                         // tell login view controller to dismiss after facebook login
                         NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationFacebookLoggedIn, object: nil)
@@ -58,7 +57,7 @@ class OTMFacebookDelegate: NSObject, FBSDKLoginButtonDelegate {
         NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationFacebookLoggedIn, object: nil)
         
         if OTMClient.sharedInstance().sessionID != nil {
-            
+            OTMClient.deleteSession()
             OTMClient.sharedInstance().clearSession()
             println("session id cleared \(OTMClient.sharedInstance().sessionID)")
         } else {

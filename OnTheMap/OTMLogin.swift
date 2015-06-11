@@ -10,6 +10,7 @@ import UIKit
 
 class OTMLogin: NSObject, LoginViewControllerDelegate, OTMBarButtonDelegate {
     
+    // not used
     var authenticated: Bool?
     
     override init() {

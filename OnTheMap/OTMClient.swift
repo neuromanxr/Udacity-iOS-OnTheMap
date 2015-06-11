@@ -33,19 +33,6 @@ class OTMClient: NSObject {
     var email: String? = nil
     var pass: String? = nil
     
-    // your info
-    var yourName: String? = nil
-    var firstName: String? = nil
-    var lastName: String? = nil
-    var yourCoordinates: CLLocation? = nil
-    var yourLink: String? = nil
-    var yourUniqueKey: String? = nil
-    var yourMapString: String? = nil
-    
-    
-    // student locations
-    var studentLocations = [OTMStudentLocations]()
-    
     // initialize shared NSURL session
     override init() {
         session = NSURLSession.sharedSession()
@@ -275,21 +262,15 @@ class OTMClient: NSObject {
         defaults.removeObjectForKey(JSONResponseKeys.SessionID)
     }
     
-    class func getSession() -> String {
+    class func getSession() -> String? {
         let defaults = NSUserDefaults.standardUserDefaults()
-        return defaults.objectForKey(JSONResponseKeys.SessionID) as! String
+        let session: String? = defaults.objectForKey(JSONResponseKeys.SessionID) as? String
+        return session
     }
     
     func clearSession() {
         self.sessionID = nil
         self.email = nil
         self.pass = nil
-        self.yourName = nil
-        self.firstName = nil
-        self.lastName = nil
-        self.yourCoordinates = nil
-        self.yourLink = nil
-        self.yourUniqueKey = nil
-        self.yourMapString = nil
     }
 }

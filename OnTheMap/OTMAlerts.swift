@@ -9,7 +9,7 @@
 import UIKit
 
 extension OTMClient {
-    
+    // alert view helper
     func alertControllerWithTitle(title: String?, message: String?,actionTitle: String?) -> UIAlertController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         let alertAction = UIAlertAction(title: actionTitle!, style: UIAlertActionStyle.Default, handler: nil)

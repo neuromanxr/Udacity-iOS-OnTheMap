@@ -33,6 +33,7 @@ extension OTMClient {
         static let NotificationLoggedIn: String = "LoggedIn"
         static let NotificationLoadStudents: String = "LoadStudents"
         static let NotificationInfoPostAlert: String = "InfoPostAlert"
+        
     }
     
     // MARK: Methods
@@ -95,5 +96,17 @@ extension OTMClient {
         // MARK: Results
         static let Results = "results"
         
+    }
+    
+    // MARK: - JSON Body Keys
+    struct JSONBodyKeys {
+        
+        static let keyLongitude: String = "longitude"
+        static let keyLatitude: String = "latitude"
+        static let keyURL: String = "mediaURL"
+        static let keyMapString: String = "mapString"
+        static let keyLastName: String = "lastName"
+        static let keyFirstName: String = "firstName"
+        static let keyUniqueKey: String = "uniqueKey"
     }
 }

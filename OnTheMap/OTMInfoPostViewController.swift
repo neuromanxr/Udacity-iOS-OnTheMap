@@ -34,7 +34,10 @@ class OTMInfoPostViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         setupUI()
-        
+        let studentPost = OTMStudentData.sharedInstance().studentPost!
+        println("** STUDENT POST \(studentPost.yourFirstName)")
+        OTMStudentData.sharedInstance().studentPost?.yourUniqueKey = ""
+        println("* Student post \(studentPost.yourUniqueKey)")
     }
 
     override func didReceiveMemoryWarning() {
@@ -92,8 +95,9 @@ class OTMInfoPostViewController: UIViewController {
             self.presentViewController(alertController, animated: true, completion: nil)
         } else {
             
-            // post the link
-            OTMClient.sharedInstance().yourLink = self.linkTextField.text!
+            // TODO: set the studentPostObject here
+            OTMStudentData.sharedInstance().studentPost?.yourLink = self.linkTextField.text
+            OTMStudentData.sharedInstance().studentPost?.yourUniqueKey = "8888"
             OTMClient.sharedInstance().postStudentLocation({ (success, result, errorString) -> Void in
                 if success {
                     println("posting the link: \(result)")
@@ -120,9 +124,9 @@ class OTMInfoPostViewController: UIViewController {
             } else {
                 let placemark = location.first as! CLPlacemark
                 let coordinates = placemark.location
-                
-                OTMClient.sharedInstance().yourMapString = string
-                OTMClient.sharedInstance().yourCoordinates = coordinates
+                // TODO: - wip
+                OTMStudentData.sharedInstance().studentPost?.yourMapString = string
+                OTMStudentData.sharedInstance().studentPost?.yourCoordinates = coordinates
                 
                 completion(location: coordinates, error: nil)
                 
@@ -156,8 +160,8 @@ class OTMInfoPostViewController: UIViewController {
         let region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(0.001, 0.001))
         self.mapView.setRegion(region, animated: true)
         
-        let yourName = OTMClient.sharedInstance().yourName
-        let myPost = OTMStudentLocations(title: yourName!, studentName: yourName!, studentLink: "link", coordinate: location.coordinate)
+        let myPost = OTMStudentAnnotation(title: "You", studentName: "You", studentLink: "Your link!", coordinate: location.coordinate)
+
         self.mapView.addAnnotation(myPost)
     }
 

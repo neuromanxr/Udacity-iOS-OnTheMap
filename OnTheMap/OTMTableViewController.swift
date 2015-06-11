@@ -8,12 +8,11 @@
 
 import UIKit
 
-class OTMTableViewController: UITableViewController /*LoginViewControllerDelegate*/ {
+class OTMTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        OTMClient.sharedInstance().delegate = self
         OTMClient.sharedInstance().setupNavigationItem(self.navigationItem)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateStudentLocations", name: OTMClient.Constants.NotificationReload, object: nil)
@@ -34,28 +33,6 @@ class OTMTableViewController: UITableViewController /*LoginViewControllerDelegat
         NSNotificationCenter.defaultCenter().removeObserver(self, name: OTMClient.Constants.NotificationLoggedIn, object: nil)
 
     }
-    
-//    func barButtonShowLogin() {
-////        let loginView = self.storyboard!.instantiateViewControllerWithIdentifier("LoginView") as! OTMLoginViewController
-////        self.presentViewController(loginView, animated: false, completion: nil)
-//        
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//            let loginView = self.storyboard!.instantiateViewControllerWithIdentifier("LoginView") as! OTMLoginViewController
-//            loginView.delegate = OTMLogin.sharedInstance()
-//            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-//            let rootViewController = appDelegate.window?.rootViewController as! UINavigationController
-//            rootViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
-//            rootViewController.setViewControllers([loginView], animated: true)
-//        })
-//        println("bar button show login")
-//    }
-    
-//    func barButtonShowInfoPost() {
-//        println("barButton: info post presented in table view")
-//        let infoPostViewController = self.storyboard!.instantiateViewControllerWithIdentifier("InfoPostView") as! OTMInfoPostViewController
-//        infoPostViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
-//        self.presentViewController(infoPostViewController, animated: true, completion: nil)
-//    }
     
     // MARK: - Student Locations
     func updateStudentLocations() {
@@ -86,7 +63,7 @@ class OTMTableViewController: UITableViewController /*LoginViewControllerDelegat
     func loggedOut() -> Void {
         println("barButton: logout in table view")
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//            self.navigationItem.leftBarButtonItem?.enabled = false
+
             OTMClient.sharedInstance().swapLeftBarButton(barButtonType.login, item: self.navigationItem)
         })
     }
@@ -99,18 +76,6 @@ class OTMTableViewController: UITableViewController /*LoginViewControllerDelegat
             OTMClient.sharedInstance().swapLeftBarButton(barButtonType.logout, item: self.navigationItem)
         })
     }
-    
-//    func didLoggedIn(status: Bool) {
-//        println("logged in")
-//        
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//            let mainView = mainStoryboard.instantiateViewControllerWithIdentifier("MainView") as! UITabBarController
-//            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-//            let rootViewController = appDelegate.window?.rootViewController as! UINavigationController
-//            rootViewController.setViewControllers([mainView], animated: true)
-//        })
-//    }
 
     // MARK: - Table view data source
 
@@ -123,30 +88,48 @@ class OTMTableViewController: UITableViewController /*LoginViewControllerDelegat
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        println("Student Locations count \(OTMClient.sharedInstance().studentLocations.count)")
+        var studentCount: Int?
+        if let studentArray = OTMStudentData.sharedInstance().studentObjects {
+            studentCount = studentArray.count
+        } else {
+            studentCount = 0
+        }
         
-        return OTMClient.sharedInstance().studentLocations.count
+        println("Student Locations count \(OTMStudentData.sharedInstance().studentObjects!.count)")
+        
+        return studentCount!
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cellIdentifier = "StudentInfo"
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! OTMTableViewCell
 
-        // Configure the cell...
-        let studentObject = OTMClient.sharedInstance().studentLocations[indexPath.row]
-        
-        cell.studentLabel.text = studentObject.studentName
-        cell.pinImage.image = UIImage(named: "pin")
+        var studentObject: OTMStudentInformation?
+        if let studentArray = OTMStudentData.sharedInstance().studentObjects {
+            studentObject = studentArray[indexPath.row]
+            // Configure the cell...
+            cell.studentLabel.text = studentObject!.studentName
+            cell.pinImage.image = UIImage(named: "pin")
+            
+        } else {
+            studentObject = nil
+        }
 
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let studentObject = OTMClient.sharedInstance().studentLocations[indexPath.row]
-        let studentLink = studentObject.studentLink
-        let studentURL = NSURL(string: studentLink)
-        UIApplication.sharedApplication().openURL(studentURL!)
         
+        var studentObject: OTMStudentInformation?
+        if let studentArray = OTMStudentData.sharedInstance().studentObjects {
+            studentObject = studentArray[indexPath.row]
+            
+            let studentLink = studentObject!.studentLink
+            let studentURL = NSURL(string: studentLink)
+            UIApplication.sharedApplication().openURL(studentURL!)
+        } else {
+            studentObject = nil
+        }
     }
 
 }

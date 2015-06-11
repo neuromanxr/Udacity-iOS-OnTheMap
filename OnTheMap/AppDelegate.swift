@@ -11,7 +11,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
+
         FBSDKLoginButton()
         
         showInitialView()
@@ -30,30 +30,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewControllerDelega
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-    func didLoggedIn(status: Bool) {
-        println("logged in")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let mainView = mainStoryboard.instantiateViewControllerWithIdentifier("MainView") as! UITabBarController
-            let rootViewController = self.window?.rootViewController as! UINavigationController
-            rootViewController.setViewControllers([mainView], animated: true)
-        })
-    }
-    
     func showInitialView() {
+        // setup initial views
+        
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let mainView = mainStoryboard.instantiateViewControllerWithIdentifier("MainView") as! UITabBarController
         OTMClient.sharedInstance().delegate = OTMLogin.sharedInstance()
         let rootViewController = UINavigationController(rootViewController: mainView)
         self.window?.rootViewController = rootViewController
+        self.window?.makeKeyAndVisible()
+
+        // if logged into facebook before, retrieve the data again
+        if let session = OTMClient.getSession() {
+            OTMClient.sharedInstance().sessionID = session
+            
+            OTMClient.sharedInstance().getPublicUserData({ (success, results, errorString) -> Void in
+                if success {
+                    
+                    // tell login view controller to dismiss after facebook login
+//                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationFacebookLoggedIn, object: nil)
+                    // get the student data
+                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoadStudents, object: nil)
+                    
+                } else {
+                    println("failed didn't get user data")
+                }
+            })
+        }
         
+        // check if there's a current session
         if OTMClient.sharedInstance().sessionID != nil {
             // already logged in
-            rootViewController.setViewControllers([mainView], animated: true)
+            println("logged in, show main")
+            rootViewController.setViewControllers([mainView], animated: false)
+            
             
         } else {
-            // show login
+            // not logged in, show login view
             let loginView = mainStoryboard.instantiateViewControllerWithIdentifier("LoginView") as! OTMLoginViewController
             loginView.delegate = OTMLogin.sharedInstance()
             rootViewController.setViewControllers([loginView], animated: false)

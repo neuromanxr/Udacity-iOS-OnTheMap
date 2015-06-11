@@ -63,7 +63,8 @@ class OTMLoginViewController: UIViewController {
     }
     
     func dismiss() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        // after facebook login, dismiss login view
+        self.delegate?.didLoggedIn(true)
     }
     
     func setupUI() {

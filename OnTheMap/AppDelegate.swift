@@ -22,7 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-
+//        OTMClient.sharedInstance().clearSession()
+//        OTMClient.deleteSession()
         FBSDKLoginButton()
         
         showInitialView()
@@ -37,20 +38,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let mainView = mainStoryboard.instantiateViewControllerWithIdentifier("MainView") as! UITabBarController
         OTMClient.sharedInstance().delegate = OTMLogin.sharedInstance()
         let rootViewController = UINavigationController(rootViewController: mainView)
+        rootViewController.navigationBar.hidden = true
         self.window?.rootViewController = rootViewController
         self.window?.makeKeyAndVisible()
 
         // if logged into facebook before, retrieve the data again
-        if let session = OTMClient.getSession() {
+        if FBSDKAccessToken.currentAccessToken() != nil {
+            let session = OTMClient.getSession()
             OTMClient.sharedInstance().sessionID = session
             
             OTMClient.sharedInstance().getPublicUserData({ (success, results, errorString) -> Void in
                 if success {
                     
-                    // tell login view controller to dismiss after facebook login
-//                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationFacebookLoggedIn, object: nil)
                     // get the student data
-                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoadStudents, object: nil)
+//                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoadStudents, object: nil)
                     
                 } else {
                     println("failed didn't get user data")
@@ -59,9 +60,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // check if there's a current session
-        if OTMClient.sharedInstance().sessionID != nil {
+        if let session = OTMClient.getSession() {
+            OTMClient.sharedInstance().sessionID = session
             // already logged in
             println("logged in, show main")
+            
+            OTMClient.sharedInstance().getPublicUserData({ (success, results, errorString) -> Void in
+                if success {
+                    
+                    // get the student data
+//                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoadStudents, object: nil)
+                    
+                } else {
+                    println("failed didn't get user data")
+                }
+            })
+            
             rootViewController.setViewControllers([mainView], animated: false)
             
             

@@ -46,33 +46,59 @@ extension OTMClient {
     }
     
     func logout() {
-        // if logged in facebook
-        if FBSDKAccessToken.currentAccessToken() != nil {
-            // clear facebook token
-            FBSDKAccessToken.setCurrentAccessToken(nil)
-            // and clear session
-            self.clearSession()
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let rootViewController = appDelegate.window?.rootViewController as! UINavigationController
+        let mainViewController = rootViewController.viewControllers.first as! UITabBarController
+        
+        let alertController = UIAlertController(title: "Logout", message: "Logout?", preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let alertConfirmAction = UIAlertAction(title: "Logout", style: UIAlertActionStyle.Destructive) { (confirm) -> Void in
             
-            println("Facebook: logged out, token cleared")
-            NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
-        } else {
-            // if logged in udacity
-            println("Udacity: logged out, session cleared")
-            // clear session locally
-            self.clearSession()
-            // delete session at udacity
-            OTMClient.sharedInstance().logoutOfSession { (result, error) -> Void in
-                if let result = result.valueForKey(JSONResponseKeys.SessionID) as? [String: AnyObject] {
-
-                    println("barButton: Logout \(result)")
-                    
-                    // send notification to update ui in view controllers
-                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
-                } else {
-                    println("Logout: error")
+            // if logged in facebook
+            if FBSDKAccessToken.currentAccessToken() != nil {
+                // clear facebook token
+                FBSDKAccessToken.setCurrentAccessToken(nil)
+                // and clear session
+                self.clearSession()
+                OTMClient.deleteSession()
+                
+                println("Facebook: logged out, token cleared")
+                NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
+            } else {
+                // if logged in udacity
+                println("Udacity: logged out, session cleared")
+                
+                // show activity indicator
+                OTMActivityIndicator.sharedInstance().showActivityIndicator(mainViewController.view)
+                
+                // clear session locally
+                self.clearSession()
+                OTMClient.deleteSession()
+                // delete session at udacity
+                OTMClient.sharedInstance().logoutOfSession { (result, error) -> Void in
+                    if let result = result.valueForKey(JSONResponseKeys.SessionID) as? [String: AnyObject] {
+                        
+                        // hide activity indicator
+                        OTMActivityIndicator.sharedInstance().hideActivityIndicator()
+                        println("barButton: Logout \(result)")
+                        
+                        // send notification to update ui in view controllers
+                        NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
+                    } else {
+                        println("Logout: error")
+                    }
                 }
             }
         }
+        
+        let alertCancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) { (cancel) -> Void in
+            println("cancelled")
+        }
+        
+        alertController.addAction(alertConfirmAction)
+        alertController.addAction(alertCancelAction)
+        
+        mainViewController.presentViewController(alertController, animated: true, completion: nil)
     }
     
     func postNotificationReloadData() {

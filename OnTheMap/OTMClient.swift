@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import FBSDKLoginKit
 
 // methods called when respective navigation bar button tapped
 protocol OTMBarButtonDelegate {
@@ -260,6 +261,8 @@ class OTMClient: NSObject {
     class func deleteSession() {
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.removeObjectForKey(JSONResponseKeys.SessionID)
+        
+        FBSDKAccessToken.setCurrentAccessToken(nil)
     }
     
     class func getSession() -> String? {

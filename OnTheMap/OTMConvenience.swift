@@ -20,6 +20,10 @@ extension OTMClient {
                 self.email = nil
                 self.pass = nil
                 
+                // save the session
+                OTMClient.storeSession(sessionID!)
+                self.sessionID = sessionID
+                
                 println("auth session id \(self.sessionID)")
                 // then get the user data using the session id (user_id)
                 self.getPublicUserData({ (success, userData, errorString) -> Void in
@@ -97,17 +101,6 @@ extension OTMClient {
                     // parsed the json result
                     completionHandler(result: students, error: nil)
 //                    println("student locations: got the result \(results)")
-                    
-                    // clear the original data first
-//                    OTMClient.sharedInstance().studentLocations = [OTMStudentLocations]()
-                    
-//                    for student in results {
-//                        println("** Object \(student)")
-//                        let studentObject = OTMStudentLocations.parseJSON(student)
-//                        println("* name: \(studentObject.studentName) url: \(studentObject.studentLink) coordinate: \(studentObject.coordinate)")
-//                        OTMClient.sharedInstance().studentLocations.append(studentObject)
-                    
-//                    }
                     println("student locations array \(students.count)")
                     
                 } else {
@@ -176,9 +169,6 @@ extension OTMClient {
                     
                     OTMStudentData.sharedInstance().studentPost = OTMStudentPost(firstName: firstName!, lastName: lastName!)
                     
-                    
-//                    let yourName = "\(firstName!) \(lastName!)"
-//                    println("GET: user data results \(yourName)")
                     // parsed the json result
                     completionHandler(success:true, userData: results, errorString: nil)
                 } else {
@@ -249,9 +239,9 @@ extension OTMClient {
                 completionHandler(success: false, sessionID: nil, errorString: "login failed (facebook session id)")
             } else {
                 if let session = result.valueForKey("account")?.valueForKey("key") as? String {
-                    // save the session
+
                     println("session id \(session)")
-                    self.sessionID = session
+
                     completionHandler(success: true, sessionID: session, errorString: nil)
                 } else {
                     completionHandler(success: false, sessionID: nil, errorString: "couldn't parse results. login failed (facebook session id)")
@@ -283,8 +273,7 @@ extension OTMClient {
             } else {
                 if let session = result.valueForKey("account")?.valueForKey("key") as? String {
                     println("session id \(session)")
-                    // save the session
-                    self.sessionID = session
+                    
                     completionHandler(success: true, sessionID: session, errorString: nil)
                 } else {
                     completionHandler(success: false, sessionID: nil, errorString: "couldn't parse session id")

@@ -90,6 +90,8 @@ class OTMLoginViewController: UIViewController {
             OTMClient.sharedInstance().email = self.emailTextField.text!
             OTMClient.sharedInstance().pass = self.passwordTextField.text!
             
+            // show the activity indicator
+            OTMActivityIndicator.sharedInstance().showActivityIndicator(self.view)
             OTMClient.sharedInstance().authenticateWithViewController(self, completionHandler: { (success, errorString) -> Void in
                 if success {
                     println("login success")
@@ -98,6 +100,9 @@ class OTMLoginViewController: UIViewController {
                     NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedIn, object: nil)
                     
                     self.delegate?.didLoggedIn(true)
+                    
+                    // hide the activity indicator
+                    OTMActivityIndicator.sharedInstance().hideActivityIndicator()
 
                 } else {
                     println("login error \(errorString)")

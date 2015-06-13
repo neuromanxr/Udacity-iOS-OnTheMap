@@ -121,12 +121,13 @@ class OTMTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         var studentObject: OTMStudentInformation?
+//        println("student object: \(OTMStudentData.sharedInstance().studentObjects)")
         if let studentArray = OTMStudentData.sharedInstance().studentObjects {
             studentObject = studentArray[indexPath.row]
-            
+            println("student object \(studentObject!)")
             let studentLink = studentObject!.studentLink
-            let studentURL = NSURL(string: studentLink)
-            UIApplication.sharedApplication().openURL(studentURL!)
+            let studentURL = NSURL(string: studentLink)!
+            UIApplication.sharedApplication().openURL(studentURL)
         } else {
             studentObject = nil
         }

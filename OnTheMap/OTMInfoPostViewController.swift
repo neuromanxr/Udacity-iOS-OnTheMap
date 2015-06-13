@@ -34,10 +34,6 @@ class OTMInfoPostViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         setupUI()
-        let studentPost = OTMStudentData.sharedInstance().studentPost!
-        println("** STUDENT POST \(studentPost.yourFirstName)")
-        OTMStudentData.sharedInstance().studentPost?.yourUniqueKey = ""
-        println("* Student post \(studentPost.yourUniqueKey)")
     }
 
     override func didReceiveMemoryWarning() {
@@ -98,11 +94,18 @@ class OTMInfoPostViewController: UIViewController {
             // TODO: set the studentPostObject here
             OTMStudentData.sharedInstance().studentPost?.yourLink = self.linkTextField.text
             OTMStudentData.sharedInstance().studentPost?.yourUniqueKey = "8888"
+            
+            OTMActivityIndicator.sharedInstance().showActivityIndicator(self.view)
             OTMClient.sharedInstance().postStudentLocation({ (success, result, errorString) -> Void in
                 if success {
                     println("posting the link: \(result)")
+                    // hide the activity indicator
+                    OTMActivityIndicator.sharedInstance().hideActivityIndicator()
                 } else {
                     println("error posting: \(errorString)")
+                    // hide the activity indicator
+                    OTMActivityIndicator.sharedInstance().hideActivityIndicator()
+                    
                     let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Submit Post", message: "Post submission failed!", actionTitle: "OK")
                     self.presentViewController(alertController, animated: true, completion: nil)
                 }
@@ -114,12 +117,19 @@ class OTMInfoPostViewController: UIViewController {
     
     func getLocationFromString(string: String, withCompletion completion: (location: CLLocation?, error: NSError?) -> ()) {
         
+        // show the activity indicator
+        OTMActivityIndicator.sharedInstance().showActivityIndicator(self.view)
+        
         CLGeocoder().geocodeAddressString(string) { (location: [AnyObject]!, error: NSError!) -> Void in
 //            println("geocode \(location)")
             if let error = error {
                 println("error geocoding in function \(error)")
                 completion(location: nil, error: error)
                 let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Geocoding", message: "Couldn't get the coordinates!", actionTitle: "OK")
+                
+                // hide the activity indicator
+                OTMActivityIndicator.sharedInstance().hideActivityIndicator()
+                
                 self.presentViewController(alertController, animated: true, completion: nil)
             } else {
                 let placemark = location.first as! CLPlacemark
@@ -127,6 +137,9 @@ class OTMInfoPostViewController: UIViewController {
                 // TODO: - wip
                 OTMStudentData.sharedInstance().studentPost?.yourMapString = string
                 OTMStudentData.sharedInstance().studentPost?.yourCoordinates = coordinates
+                
+                // hide the activity indicator
+                OTMActivityIndicator.sharedInstance().hideActivityIndicator()
                 
                 completion(location: coordinates, error: nil)
                 

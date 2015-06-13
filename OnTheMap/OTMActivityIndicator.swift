@@ -9,26 +9,46 @@
 import UIKit
 
 class OTMActivityIndicator: NSObject {
-   
-    func showActivityIndicator(indicator: UIView) {
-        var container: UIView = UIView()
-        container.frame = indicator.frame
-        container.center = indicator.center
-        container.backgroundColor = UIColor.redColor()
+    
+    var activity: UIActivityIndicatorView
+    
+    override init() {
         
-        var loadingView: UIView = UIView()
-        loadingView.frame = CGRectMake(0, 0, 80, 80)
-        loadingView.center = indicator.center
-        loadingView.backgroundColor = UIColor.blueColor()
+        self.activity = UIActivityIndicatorView()
+        
+        super.init()
+    }
+    
+    class func sharedInstance() -> OTMActivityIndicator {
+        
+        struct Singleton {
+            static var sharedInstance = OTMActivityIndicator()
+        }
+        return Singleton.sharedInstance
+    }
+   
+    func showActivityIndicator(parentView: UIView) {
+        
+        var loadingView = UIView(frame: CGRectMake(parentView.frame.width / 2, parentView.frame.height / 2, 80, 80))
+        loadingView.center = parentView.center
+        loadingView.backgroundColor = UIColor.orangeColor()
+        loadingView.alpha = 0.5
         loadingView.clipsToBounds = true
         loadingView.layer.cornerRadius = 10
         
-        var activity: UIActivityIndicatorView = UIActivityIndicatorView()
-        activity.frame = CGRectMake(0.0, 0.0, 40.0, 40.0)
-        activity.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
-        activity.center = CGPointMake(loadingView.frame.size.width / 2, loadingView.frame.size.height / 2)
-        loadingView.addSubview(activity)
-        indicator.addSubview(container)
-        activity.startAnimating()
+        self.activity.frame = CGRectMake(parentView.frame.width / 2, parentView.frame.height / 2, 40.0, 40.0)
+        self.activity.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        self.activity.center = CGPointMake(loadingView.frame.size.width / 2, loadingView.frame.size.height / 2)
+        self.activity.alpha = 1.0
+        
+        loadingView.addSubview(self.activity)
+        parentView.addSubview(loadingView)
+        self.activity.startAnimating()
+    }
+    
+    func hideActivityIndicator() {
+        self.activity.stopAnimating()
+        self.activity.alpha = 0.0
+        self.activity.superview?.removeFromSuperview()
     }
 }

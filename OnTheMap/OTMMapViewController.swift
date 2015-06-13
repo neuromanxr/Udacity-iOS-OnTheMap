@@ -20,7 +20,7 @@ class OTMMapViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         mapView.delegate = self
-        
+
         OTMClient.sharedInstance().setupNavigationItem(self.navigationItem)
         
         self.loadStudentLocations()
@@ -98,6 +98,9 @@ class OTMMapViewController: UIViewController {
             // update UI
             println("updated the ui")
             
+            // stop the activity indicator
+            OTMActivityIndicator.sharedInstance().hideActivityIndicator()
+            
             // does existing annotations need to be cleared before reloading?
             if self.mapView.annotations.isEmpty {
                 self.mapView.addAnnotations(annotations)
@@ -112,6 +115,10 @@ class OTMMapViewController: UIViewController {
     
     func loadStudentLocations() -> Void {
         println("loading student data")
+
+        // show the activity indicator
+        OTMActivityIndicator.sharedInstance().showActivityIndicator(self.view)
+        
         OTMClient.sharedInstance().getStudentLocations { (result, error) -> Void in
             
             if let result = result {
@@ -121,6 +128,10 @@ class OTMMapViewController: UIViewController {
                 self.addStudentAnnotations()
                 
             } else {
+                
+                // hide the activity indicator
+                OTMActivityIndicator.sharedInstance().hideActivityIndicator()
+                
                 // couldn't get the student locations
                 println("didn't get student locations \(error)")
                 let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Student Information", message: "Didn't get the student info", actionTitle: "OK")

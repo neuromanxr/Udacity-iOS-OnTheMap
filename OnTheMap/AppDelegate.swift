@@ -22,8 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-//        OTMClient.sharedInstance().clearSession()
-//        OTMClient.deleteSession()
+
         FBSDKLoginButton()
         
         showInitialView()
@@ -51,7 +50,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if success {
                     
                     // get the student data
-//                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoadStudents, object: nil)
                     
                 } else {
                     println("failed didn't get user data")
@@ -69,7 +67,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if success {
                     
                     // get the student data
-//                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoadStudents, object: nil)
                     
                 } else {
                     println("failed didn't get user data")

@@ -94,7 +94,7 @@ class OTMLoginViewController: UIViewController {
     @IBAction func loginAction(sender: UIButton) {
         
         if Reachability.isConnectedToNetwork() {
-            println("Connected")
+            // there's internet
             if !emailTextField.text.isEmpty && !passwordTextField.text.isEmpty {
                 OTMClient.sharedInstance().email = self.emailTextField.text!
                 OTMClient.sharedInstance().pass = self.passwordTextField.text!
@@ -106,7 +106,7 @@ class OTMLoginViewController: UIViewController {
                 
                 OTMClient.sharedInstance().authenticateWithViewController(self, completionHandler: { (success, errorString) -> Void in
                     if success {
-                        println("login success")
+                        
                         // tell map view we are logged in, so load the student locations
                         // logged in, change the left bar button to logout
                         NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedIn, object: nil)
@@ -117,7 +117,7 @@ class OTMLoginViewController: UIViewController {
                         OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
                         
                     } else {
-                        println("login error \(errorString)")
+                        // there was an error logging in
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
                             OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
@@ -132,7 +132,7 @@ class OTMLoginViewController: UIViewController {
                 self.presentViewController(alertController, animated: true, completion: nil)
             }
         } else {
-            println("Not Connected")
+            // there's no internet, show alert
             let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Login", message: "No Internet!", actionTitle: "OK")
             self.presentViewController(alertController, animated: true, completion: nil)
         }

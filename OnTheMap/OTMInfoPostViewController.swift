@@ -97,7 +97,7 @@ class OTMInfoPostViewController: UIViewController {
                         OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
                         
                         // location not found, show error alert
-                        let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Location Error", message: "Location not found", actionTitle: "OK")
+                        let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Location Error", message: "Timedout, couldn't get location", actionTitle: "OK")
                         self.presentViewController(alertController, animated: true, completion: nil)
                     } else {
                         println("location coordinates \(location)")
@@ -143,24 +143,31 @@ class OTMInfoPostViewController: UIViewController {
                 OTMClient.sharedInstance().postStudentLocation({ (success, result, errorString) -> Void in
                     if success {
                         println("posting the link: \(result)")
-                        // hide the activity indicator
-                        OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
                         
-                        let alertController = UIAlertController(title: "Success", message: "Link Posted", preferredStyle: UIAlertControllerStyle.Alert)
-                        let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { (alertActionOK) -> Void in
-                            // then dismiss view
-                            self.dismissViewControllerAnimated(true, completion: nil)
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            // hide the activity indicator
+                            OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
+                            
+                            let alertController = UIAlertController(title: "Success", message: "Link Posted", preferredStyle: UIAlertControllerStyle.Alert)
+                            let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { (alertActionOK) -> Void in
+                                // then dismiss view
+                                self.dismissViewControllerAnimated(true, completion: nil)
+                            })
+                            alertController.addAction(alertAction)
+                            self.presentViewController(alertController, animated: true, completion: nil)
                         })
-                        alertController.addAction(alertAction)
-                        self.presentViewController(alertController, animated: true, completion: nil)
+                        
                         
                     } else {
                         println("error posting: \(errorString)")
-                        // hide the activity indicator
-                        OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
                         
-                        let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Submit Post", message: "Post submission failed!", actionTitle: "OK")
-                        self.presentViewController(alertController, animated: true, completion: nil)
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            // hide the activity indicator
+                            OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
+                            
+                            let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Submit Post", message: "Post submission failed!", actionTitle: "OK")
+                            self.presentViewController(alertController, animated: true, completion: nil)
+                        })
                     }
                 })
             }

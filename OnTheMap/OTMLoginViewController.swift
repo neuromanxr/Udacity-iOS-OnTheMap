@@ -26,7 +26,9 @@ class OTMLoginViewController: UIViewController {
     let loginTextFieldDelegate = OTMLoginTextFieldDelegate()
 
     var delegate: LoginViewControllerDelegate?
-
+    
+    var activity = UIActivityIndicatorView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,6 +53,11 @@ class OTMLoginViewController: UIViewController {
         if (FBSDKAccessToken.currentAccessToken() != nil) {
             println("There's a current access token \(FBSDKAccessToken.currentAccessToken().tokenString)")
         }
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        
     }
     
     deinit {
@@ -86,32 +93,47 @@ class OTMLoginViewController: UIViewController {
     
     @IBAction func loginAction(sender: UIButton) {
         
-        if !emailTextField.text.isEmpty && !passwordTextField.text.isEmpty {
-            OTMClient.sharedInstance().email = self.emailTextField.text!
-            OTMClient.sharedInstance().pass = self.passwordTextField.text!
-            
-            // show the activity indicator
-            OTMActivityIndicator.sharedInstance().showActivityIndicator(self.view)
-            OTMClient.sharedInstance().authenticateWithViewController(self, completionHandler: { (success, errorString) -> Void in
-                if success {
-                    println("login success")
-                    // tell map view we are logged in, so load the student locations
-                    // logged in, change the left bar button to logout
-                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedIn, object: nil)
-                    
-                    self.delegate?.didLoggedIn(true)
-                    
-                    // hide the activity indicator
-                    OTMActivityIndicator.sharedInstance().hideActivityIndicator()
-
-                } else {
-                    println("login error \(errorString)")
-                    let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Login", message: "Invalid Login!", actionTitle: "OK")
-                    self.presentViewController(alertController, animated: true, completion: nil)
+        if Reachability.isConnectedToNetwork() {
+            println("Connected")
+            if !emailTextField.text.isEmpty && !passwordTextField.text.isEmpty {
+                OTMClient.sharedInstance().email = self.emailTextField.text!
+                OTMClient.sharedInstance().pass = self.passwordTextField.text!
+                
+                // show the activity indicator
+                if !activity.isAnimating() {
+                    OTMActivityIndicator.sharedInstance().showActivityIndicator(self.view, activity: activity)
                 }
-            })
+                
+                OTMClient.sharedInstance().authenticateWithViewController(self, completionHandler: { (success, errorString) -> Void in
+                    if success {
+                        println("login success")
+                        // tell map view we are logged in, so load the student locations
+                        // logged in, change the left bar button to logout
+                        NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedIn, object: nil)
+                        
+                        self.delegate?.didLoggedIn(true)
+                        
+                        // hide the activity indicator
+                        OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
+                        
+                    } else {
+                        println("login error \(errorString)")
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
+                            
+                            let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Login", message: "Invalid Login!", actionTitle: "OK")
+                            self.presentViewController(alertController, animated: true, completion: nil)
+                        })
+                    }
+                })
+            } else {
+                let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Login", message: "Enter login and password!", actionTitle: "OK")
+                self.presentViewController(alertController, animated: true, completion: nil)
+            }
         } else {
-            let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Login", message: "Enter login and password!", actionTitle: "OK")
+            println("Not Connected")
+            let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Login", message: "No Internet!", actionTitle: "OK")
             self.presentViewController(alertController, animated: true, completion: nil)
         }
     }

@@ -10,11 +10,7 @@ import UIKit
 
 class OTMActivityIndicator: NSObject {
     
-    var activity: UIActivityIndicatorView
-    
     override init() {
-        
-        self.activity = UIActivityIndicatorView()
         
         super.init()
     }
@@ -27,28 +23,34 @@ class OTMActivityIndicator: NSObject {
         return Singleton.sharedInstance
     }
    
-    func showActivityIndicator(parentView: UIView) {
+    func showActivityIndicator(parentView: UIView, activity: UIActivityIndicatorView) {
         
-        var loadingView = UIView(frame: CGRectMake(parentView.frame.width / 2, parentView.frame.height / 2, 80, 80))
-        loadingView.center = parentView.center
+        activity.startAnimating()
+        
+        var loadingView = UIView(frame: CGRectMake(parentView.frame.width / 2 - 40, parentView.frame.height / 2, 80, 80))
+//        loadingView.center = parentView.center
         loadingView.backgroundColor = UIColor.orangeColor()
         loadingView.alpha = 0.5
         loadingView.clipsToBounds = true
         loadingView.layer.cornerRadius = 10
         
-        self.activity.frame = CGRectMake(parentView.frame.width / 2, parentView.frame.height / 2, 40.0, 40.0)
-        self.activity.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
-        self.activity.center = CGPointMake(loadingView.frame.size.width / 2, loadingView.frame.size.height / 2)
-        self.activity.alpha = 1.0
+        activity.frame = CGRectMake(parentView.frame.width / 2, parentView.frame.height / 2, 40.0, 40.0)
+        activity.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        activity.center = CGPointMake(loadingView.frame.size.width / 2, loadingView.frame.size.height / 2)
+        activity.alpha = 1.0
         
-        loadingView.addSubview(self.activity)
+        loadingView.addSubview(activity)
         parentView.addSubview(loadingView)
-        self.activity.startAnimating()
+        println("Parent View: \(parentView.frame.origin.x), \(parentView.frame.origin.y)")
+        println("Act View: \(loadingView.frame.origin.x), \(loadingView.frame.origin.y)")
     }
     
-    func hideActivityIndicator() {
-        self.activity.stopAnimating()
-        self.activity.alpha = 0.0
-        self.activity.superview?.removeFromSuperview()
+    func hideActivityIndicator(activity: UIActivityIndicatorView) {
+        
+        activity.stopAnimating()
+        
+        activity.alpha = 0.0
+        activity.superview?.removeFromSuperview()
+
     }
 }

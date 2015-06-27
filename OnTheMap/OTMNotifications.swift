@@ -54,40 +54,52 @@ extension OTMClient {
         let alertController = UIAlertController(title: "Logout", message: "Logout?", preferredStyle: UIAlertControllerStyle.ActionSheet)
         let alertConfirmAction = UIAlertAction(title: "Logout", style: UIAlertActionStyle.Destructive) { (confirm) -> Void in
             
-            // if logged in facebook
-            if FBSDKAccessToken.currentAccessToken() != nil {
-                // clear facebook token
-                FBSDKAccessToken.setCurrentAccessToken(nil)
-                // and clear session
-                self.clearSession()
-                OTMClient.deleteSession()
-                
-                println("Facebook: logged out, token cleared")
-                NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
-            } else {
-                // if logged in udacity
-                println("Udacity: logged out, session cleared")
-                
-                // show activity indicator
-                OTMActivityIndicator.sharedInstance().showActivityIndicator(mainViewController.view)
-                
-                // clear session locally
-                self.clearSession()
-                OTMClient.deleteSession()
-                // delete session at udacity
-                OTMClient.sharedInstance().logoutOfSession { (result, error) -> Void in
-                    if let result = result.valueForKey(JSONResponseKeys.SessionID) as? [String: AnyObject] {
-                        
-                        // hide activity indicator
-                        OTMActivityIndicator.sharedInstance().hideActivityIndicator()
-                        println("barButton: Logout \(result)")
-                        
-                        // send notification to update ui in view controllers
-                        NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
-                    } else {
-                        println("Logout: error")
+            if Reachability.isConnectedToNetwork() {
+                // if logged in facebook
+                if FBSDKAccessToken.currentAccessToken() != nil {
+                    // clear facebook token
+                    FBSDKAccessToken.setCurrentAccessToken(nil)
+                    // and clear session
+                    self.clearSession()
+                    OTMClient.deleteSession()
+                    
+                    println("Facebook: logged out, token cleared")
+                    NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
+                    
+                    self.showLoginView()
+                } else {
+                    // if logged in udacity
+                    println("Udacity: logged out, session cleared")
+                    
+                    // show activity indicator
+                    if !self.activity.isAnimating() {
+                        OTMActivityIndicator.sharedInstance().showActivityIndicator(mainViewController.view, activity: self.activity)
+                    }
+                    
+                    // clear session locally
+                    self.clearSession()
+                    OTMClient.deleteSession()
+                    // delete session at udacity
+                    OTMClient.sharedInstance().logoutOfSession { (result, error) -> Void in
+                        if let result = result.valueForKey(JSONResponseKeys.SessionID) as? [String: AnyObject] {
+                            
+                            // hide activity indicator
+                            OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
+                            
+                            println("barButton: Logout \(result)")
+                            
+                            // send notification to update ui in view controllers
+                            NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationLoggedOut, object: nil)
+                            
+                            self.showLoginView()
+                        } else {
+                            println("Logout: error")
+                        }
                     }
                 }
+            } else {
+                let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Login", message: "No Internet!", actionTitle: "OK")
+                mainViewController.presentViewController(alertController, animated: true, completion: nil)
             }
         }
         
@@ -102,17 +114,27 @@ extension OTMClient {
     }
     
     func postNotificationReloadData() {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let rootViewController = appDelegate.window?.rootViewController as! UINavigationController
+        let mainViewController = rootViewController.viewControllers.first as! UITabBarController
         
-        // post the notification to update the student locations
-        OTMClient.sharedInstance().getStudentLocations { (result, error) -> Void in
-            if let result = result {
-                // reload the student data in map and table view
-                NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationReload, object: nil)
-                println("Note posted")
-            } else {
-                println("Reload: error getting student locations")
-            }
+        if Reachability.isConnectedToNetwork() {
+            println("There's Internet")
+            NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationReload, object: nil)
+        } else {
+            let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Connection", message: "No Internet", actionTitle: "OK")
+            mainViewController.presentViewController(alertController, animated: true, completion: nil)
         }
+        // post the notification to update the student locations
+//        OTMClient.sharedInstance().getStudentLocations { (result, error) -> Void in
+//            if let result = result {
+//                // reload the student data in map and table view
+//                NSNotificationCenter.defaultCenter().postNotificationName(OTMClient.Constants.NotificationReload, object: nil)
+//                println("Note posted")
+//            } else {
+//                println("Reload: error getting student locations")
+//            }
+//        }
     }
     
     func showInfoPostingView(sender: AnyObject) {

@@ -28,12 +28,36 @@ class OTMInfoPostViewController: UIViewController {
     @IBOutlet weak var submitButton: UIButton!
     
     @IBOutlet weak var locationTextField: UITextField!
+    
+    var tapRecognizer: UITapGestureRecognizer? = nil
+    
+    var activity = UIActivityIndicatorView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setupUI()
+        
+        tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
+        tapRecognizer?.numberOfTapsRequired = 1
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        subscribeToKeyboardNotifications()
+        
+        addKeyboardDismissRecognizer()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        unsubscribeToKeyboardNotifications()
+        
+        removeKeyboardDismissRecognizer()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -55,91 +79,111 @@ class OTMInfoPostViewController: UIViewController {
     }
 
     @IBAction func bottomBarButtonAction(sender: UIButton) {
-        // find on the map and then submit to geocode
-        if !locationTextField.text.isEmpty {
-            // get the geocode
-            getLocationFromString(locationTextField.text, withCompletion: { (location, error) -> () in
-                if let error = error {
-                    println("error \(error)")
-                    // location not found, show error alert
-                    let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Location Error", message: "Location not found", actionTitle: "OK")
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                } else {
-                    println("location coordinates \(location)")
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        // center the map on your location
-                        
-                        self.centerMapOnLocation(location!)
-                        self.revealMap()
-                    })
+        
+        if Reachability.isConnectedToNetwork() {
+            // find on the map and then submit to geocode
+            if !locationTextField.text.isEmpty {
+                // show the activity indicator
+                if !activity.isAnimating() {
+                    
+                    OTMActivityIndicator.sharedInstance().showActivityIndicator(self.middleBarView, activity: activity)
                 }
-            })
-            
+                
+                // get the geocode
+                getLocationFromString(locationTextField.text, withCompletion: { (location, error) -> () in
+                    if let error = error {
+                        println("error \(error)")
+                        // hide the activity indicator
+                        OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
+                        
+                        // location not found, show error alert
+                        let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Location Error", message: "Location not found", actionTitle: "OK")
+                        self.presentViewController(alertController, animated: true, completion: nil)
+                    } else {
+                        println("location coordinates \(location)")
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            // hide the activity indicator
+                            OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
+                            // center the map on your location
+                            self.centerMapOnLocation(location!)
+                            self.revealMap()
+                        })
+                    }
+                })
+                
+            } else {
+                
+                let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Location", message: "Enter a location! (Mountain View, CA)", actionTitle: "OK")
+                self.presentViewController(alertController, animated: true, completion: nil)
+            }
         } else {
-            
-            let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Location", message: "Enter a location! (Mountain View, CA)", actionTitle: "OK")
+            let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Location", message: "No Internet!", actionTitle: "OK")
             self.presentViewController(alertController, animated: true, completion: nil)
         }
-        
     }
     
     @IBAction func submitPost(sender: UIButton) {
-        // check for empty text field
-        if self.linkTextField.text.isEmpty {
-            // show an alert if there's no text
-            let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Submit Post", message: "Enter a link!", actionTitle: "OK")
-            self.presentViewController(alertController, animated: true, completion: nil)
-        } else {
-            
-            // TODO: set the studentPostObject here
-            OTMStudentData.sharedInstance().studentPost?.yourLink = self.linkTextField.text
-            OTMStudentData.sharedInstance().studentPost?.yourUniqueKey = "8888"
-            
-            OTMActivityIndicator.sharedInstance().showActivityIndicator(self.view)
-            OTMClient.sharedInstance().postStudentLocation({ (success, result, errorString) -> Void in
-                if success {
-                    println("posting the link: \(result)")
-                    // hide the activity indicator
-                    OTMActivityIndicator.sharedInstance().hideActivityIndicator()
-                } else {
-                    println("error posting: \(errorString)")
-                    // hide the activity indicator
-                    OTMActivityIndicator.sharedInstance().hideActivityIndicator()
-                    
-                    let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Submit Post", message: "Post submission failed!", actionTitle: "OK")
-                    self.presentViewController(alertController, animated: true, completion: nil)
+        
+        if Reachability.isConnectedToNetwork() {
+            // check for empty text field
+            if self.linkTextField.text.isEmpty {
+                // show an alert if there's no text
+                let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Submit Post", message: "Enter a link!", actionTitle: "OK")
+                self.presentViewController(alertController, animated: true, completion: nil)
+            } else {
+                
+                // TODO: set the studentPostObject here
+                OTMStudentData.sharedInstance().studentPost?.yourLink = self.linkTextField.text
+                OTMStudentData.sharedInstance().studentPost?.yourUniqueKey = "8888"
+                
+                if !activity.isAnimating() {
+                    OTMActivityIndicator.sharedInstance().showActivityIndicator(self.view, activity: activity)
                 }
-            })
-            // then dismiss view
-            self.dismissViewControllerAnimated(true, completion: nil)
+                OTMClient.sharedInstance().postStudentLocation({ (success, result, errorString) -> Void in
+                    if success {
+                        println("posting the link: \(result)")
+                        // hide the activity indicator
+                        OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
+                        
+                        let alertController = UIAlertController(title: "Success", message: "Link Posted", preferredStyle: UIAlertControllerStyle.Alert)
+                        let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { (alertActionOK) -> Void in
+                            // then dismiss view
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        })
+                        alertController.addAction(alertAction)
+                        self.presentViewController(alertController, animated: true, completion: nil)
+                        
+                    } else {
+                        println("error posting: \(errorString)")
+                        // hide the activity indicator
+                        OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
+                        
+                        let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Submit Post", message: "Post submission failed!", actionTitle: "OK")
+                        self.presentViewController(alertController, animated: true, completion: nil)
+                    }
+                })
+            }
+        } else {
+            let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Post", message: "No Internet!", actionTitle: "OK")
+            self.presentViewController(alertController, animated: true, completion: nil)
         }
     }
     
     func getLocationFromString(string: String, withCompletion completion: (location: CLLocation?, error: NSError?) -> ()) {
-        
-        // show the activity indicator
-        OTMActivityIndicator.sharedInstance().showActivityIndicator(self.view)
         
         CLGeocoder().geocodeAddressString(string) { (location: [AnyObject]!, error: NSError!) -> Void in
 //            println("geocode \(location)")
             if let error = error {
                 println("error geocoding in function \(error)")
                 completion(location: nil, error: error)
-                let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Geocoding", message: "Couldn't get the coordinates!", actionTitle: "OK")
-                
-                // hide the activity indicator
-                OTMActivityIndicator.sharedInstance().hideActivityIndicator()
-                
-                self.presentViewController(alertController, animated: true, completion: nil)
+
             } else {
                 let placemark = location.first as! CLPlacemark
                 let coordinates = placemark.location
-                // TODO: - wip
+                // set the string and coordinates
                 OTMStudentData.sharedInstance().studentPost?.yourMapString = string
                 OTMStudentData.sharedInstance().studentPost?.yourCoordinates = coordinates
-                
-                // hide the activity indicator
-                OTMActivityIndicator.sharedInstance().hideActivityIndicator()
                 
                 completion(location: coordinates, error: nil)
                 
@@ -150,6 +194,7 @@ class OTMInfoPostViewController: UIViewController {
     func revealMap() {
         UIView.animateWithDuration(1.0, animations: { () -> Void in
             self.topBarView.backgroundColor = self.color
+
             self.middleBarView.alpha = 0.0
             
             self.bottomBarButton.alpha = 0.0

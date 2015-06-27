@@ -9,6 +9,8 @@
 import UIKit
 
 class OTMTableViewController: UITableViewController {
+    
+    var activity = UIActivityIndicatorView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +22,11 @@ class OTMTableViewController: UITableViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loggedOut", name: OTMClient.Constants.NotificationLoggedOut, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loggedIn", name: OTMClient.Constants.NotificationLoggedIn, object: nil)
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,6 +44,10 @@ class OTMTableViewController: UITableViewController {
     // MARK: - Student Locations
     func updateStudentLocations() {
         
+        if !activity.isAnimating() {
+            OTMActivityIndicator.sharedInstance().showActivityIndicator(self.view, activity: activity)
+        }
+        
         println("loading student data")
         OTMClient.sharedInstance().getStudentLocations { (result, error) -> Void in
             
@@ -47,15 +58,19 @@ class OTMTableViewController: UITableViewController {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     // update UI
                     println("updated the ui")
-                    
+                    OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
                     self.tableView.reloadData()
                 })
                 
             } else {
-                // couldn't get the student locations
-                println("didn't get student locations \(error)")
-                let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Student Information", message: "Didn't get the student info", actionTitle: "OK")
-                self.presentViewController(alertController, animated: true, completion: nil)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
+                    // couldn't get the student locations
+                    println("didn't get student locations \(error)")
+                    let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Student Information", message: "Timedout, didn't get the student info", actionTitle: "OK")
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                })
+                
             }
         }
     }
@@ -95,8 +110,6 @@ class OTMTableViewController: UITableViewController {
             studentCount = 0
         }
         
-        println("Student Locations count \(OTMStudentData.sharedInstance().studentObjects!.count)")
-        
         return studentCount!
     }
 
@@ -121,7 +134,7 @@ class OTMTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         var studentObject: OTMStudentInformation?
-//        println("student object: \(OTMStudentData.sharedInstance().studentObjects)")
+
         if let studentArray = OTMStudentData.sharedInstance().studentObjects {
             studentObject = studentArray[indexPath.row]
             println("student object \(studentObject!)")

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		506FC5B31B1E5CFC00ABA812 /* OTMStudentInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506FC5B21B1E5CFC00ABA812 /* OTMStudentInformation.swift */; };
 		506FC5B51B1E645400ABA812 /* OTMMapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506FC5B41B1E645400ABA812 /* OTMMapViewDelegate.swift */; };
+		508B09851B3D367B003ED8D4 /* OTMReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508B09841B3D367B003ED8D4 /* OTMReachability.swift */; };
+		508B09871B3E5D42003ED8D4 /* OTMInfoPostTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508B09861B3E5D42003ED8D4 /* OTMInfoPostTextFieldDelegate.swift */; };
 		50B29C4F1B0E3888000742AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B29C4E1B0E3888000742AE /* AppDelegate.swift */; };
 		50B29C541B0E3888000742AE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50B29C521B0E3888000742AE /* Main.storyboard */; };
 		50B29C561B0E3888000742AE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50B29C551B0E3888000742AE /* Images.xcassets */; };
@@ -73,6 +75,8 @@
 /* Begin PBXFileReference section */
 		506FC5B21B1E5CFC00ABA812 /* OTMStudentInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMStudentInformation.swift; sourceTree = "<group>"; };
 		506FC5B41B1E645400ABA812 /* OTMMapViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMMapViewDelegate.swift; sourceTree = "<group>"; };
+		508B09841B3D367B003ED8D4 /* OTMReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMReachability.swift; sourceTree = "<group>"; };
+		508B09861B3E5D42003ED8D4 /* OTMInfoPostTextFieldDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMInfoPostTextFieldDelegate.swift; sourceTree = "<group>"; };
 		50B29C491B0E3888000742AE /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50B29C4D1B0E3888000742AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B29C4E1B0E3888000742AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -180,6 +184,7 @@
 				50CBF4C61B1F9E7300A893A4 /* OTMNotifications.swift */,
 				50CBF4CA1B20F59900A893A4 /* OTMAlerts.swift */,
 				50B29C761B0E68AA000742AE /* OTMConvenience.swift */,
+				508B09841B3D367B003ED8D4 /* OTMReachability.swift */,
 				50E2B1951B2795850086AFEA /* OTMLogin.swift */,
 				50B29C741B0E56D5000742AE /* OTMConstants.swift */,
 				50E2B19D1B28D99B0086AFEA /* OTMStudentPost.swift */,
@@ -195,6 +200,7 @@
 				50CE8C691B1D0EA10035C27A /* OTMLoginTextFieldDelegate.swift */,
 				50CE8C671B17C1AF0035C27A /* OTMFacebookDelegate.swift */,
 				50CBF4C81B20A92800A893A4 /* OTMInfoPostViewController.swift */,
+				508B09861B3E5D42003ED8D4 /* OTMInfoPostTextFieldDelegate.swift */,
 				50B29C521B0E3888000742AE /* Main.storyboard */,
 				50B29C551B0E3888000742AE /* Images.xcassets */,
 				50B29C571B0E3888000742AE /* LaunchScreen.xib */,
@@ -391,11 +397,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				50CBF4C71B1F9E7300A893A4 /* OTMNotifications.swift in Sources */,
+				508B09851B3D367B003ED8D4 /* OTMReachability.swift in Sources */,
 				50B29C751B0E56D5000742AE /* OTMConstants.swift in Sources */,
 				506FC5B31B1E5CFC00ABA812 /* OTMStudentInformation.swift in Sources */,
 				50E2B19E1B28D99B0086AFEA /* OTMStudentPost.swift in Sources */,
 				506FC5B51B1E645400ABA812 /* OTMMapViewDelegate.swift in Sources */,
 				50CE8C681B17C1AF0035C27A /* OTMFacebookDelegate.swift in Sources */,
+				508B09871B3E5D42003ED8D4 /* OTMInfoPostTextFieldDelegate.swift in Sources */,
 				50B29C6F1B0E4310000742AE /* OTMTableViewController.swift in Sources */,
 				50CE8C6A1B1D0EA10035C27A /* OTMLoginTextFieldDelegate.swift in Sources */,
 				50B29C731B0E507F000742AE /* OTMClient.swift in Sources */,

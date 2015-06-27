@@ -34,6 +34,8 @@ class OTMClient: NSObject {
     var email: String? = nil
     var pass: String? = nil
     
+    var activity = UIActivityIndicatorView()
+    
     // initialize shared NSURL session
     override init() {
         session = NSURLSession.sharedSession()

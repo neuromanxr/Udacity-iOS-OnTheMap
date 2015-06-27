@@ -16,6 +16,8 @@ class OTMMapViewController: UIViewController {
     
     let regionRadius: CLLocationDistance = 1000
     
+    var activity = UIActivityIndicatorView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -41,9 +43,8 @@ class OTMMapViewController: UIViewController {
         
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
         
     }
     
@@ -98,9 +99,6 @@ class OTMMapViewController: UIViewController {
             // update UI
             println("updated the ui")
             
-            // stop the activity indicator
-            OTMActivityIndicator.sharedInstance().hideActivityIndicator()
-            
             // does existing annotations need to be cleared before reloading?
             if self.mapView.annotations.isEmpty {
                 self.mapView.addAnnotations(annotations)
@@ -117,7 +115,9 @@ class OTMMapViewController: UIViewController {
         println("loading student data")
 
         // show the activity indicator
-        OTMActivityIndicator.sharedInstance().showActivityIndicator(self.view)
+        if !activity.isAnimating() {
+            OTMActivityIndicator.sharedInstance().showActivityIndicator(self.view, activity: activity)
+        }
         
         OTMClient.sharedInstance().getStudentLocations { (result, error) -> Void in
             
@@ -125,17 +125,23 @@ class OTMMapViewController: UIViewController {
                 // got the student locations
                 println("got student locations \(result.count)")
                 
-                self.addStudentAnnotations()
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.addStudentAnnotations()
+                    OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
+                })
                 
             } else {
                 
-                // hide the activity indicator
-                OTMActivityIndicator.sharedInstance().hideActivityIndicator()
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    // hide the activity indicator
+                    OTMActivityIndicator.sharedInstance().hideActivityIndicator(self.activity)
+                    
+                    // couldn't get the student locations
+                    println("didn't get student locations \(error)")
+                    let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Student Information", message: "Timedout, didn't get the student info", actionTitle: "OK")
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                })
                 
-                // couldn't get the student locations
-                println("didn't get student locations \(error)")
-                let alertController = OTMClient.sharedInstance().alertControllerWithTitle("Student Information", message: "Didn't get the student info", actionTitle: "OK")
-                self.presentViewController(alertController, animated: true, completion: nil)
             }
         }
     }

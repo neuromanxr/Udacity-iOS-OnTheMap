@@ -226,12 +226,17 @@ extension OTMClient {
             HeaderFieldKeys.HeaderFieldUdacityContentType: HeaderFieldValues.HeaderFieldUdacityValue
         ]
         
+        var jsonBody: [String: AnyObject]
         // facebook token
-        let token = FBSDKAccessToken.currentAccessToken().tokenString
+        if FBSDKAccessToken.currentAccessToken() != nil {
+            // json body with Facebook access token
+            let token = FBSDKAccessToken.currentAccessToken().tokenString
+            var accessToken: [String: AnyObject] = ["access_token": token]
+            jsonBody = ["facebook_mobile": accessToken]
+        } else {
+            jsonBody = [String: AnyObject]()
+        }
 //        println("get FBSession token: \(token)")
-        // json body with Facebook access token
-        var accessToken: [String: String] = ["access_token": token]
-        let jsonBody: [String: AnyObject] = ["facebook_mobile": accessToken]
         
         // make the request
         taskForPOSTMethod(Constants.UdacityBaseURL, method: Methods.AuthenticationSessionNew, parameters: parameters, requestValues: requestValues, jsonBody: jsonBody) { (result, error) -> Void in

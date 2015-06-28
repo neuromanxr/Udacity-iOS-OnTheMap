@@ -160,9 +160,8 @@ extension OTMClient {
                 completionHandler(success: false, userData: [String: AnyObject](), errorString: "request error: get public user data failed")
             } else {
                 // got the json result
-//                println("user data results \(result)")
                 if let results = result.valueForKey(JSONResponseKeys.User) as? [String: AnyObject] {
-                    
+//                    println("Get Public: \(results)")
                     // get your name
                     let firstName = results["first_name"] as? String
                     let lastName = results["last_name"] as? String

@@ -123,13 +123,13 @@
 		50E2B1991B28AE020086AFEA /* OTMStudentAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMStudentAnnotation.swift; sourceTree = "<group>"; };
 		50E2B19B1B28BCBD0086AFEA /* OTMStudentData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMStudentData.swift; sourceTree = "<group>"; };
 		50E2B19D1B28D99B0086AFEA /* OTMStudentPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMStudentPost.swift; sourceTree = "<group>"; };
-		50FFDD031B2E350B001E9583 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
-		50FFDD041B2E350B001E9583 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
-		50FFDD051B2E350B001E9583 /* FacebookSDK.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = FacebookSDK.strings; sourceTree = "<group>"; };
-		50FFDD061B2E350B001E9583 /* FBAudienceNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBAudienceNetwork.framework; sourceTree = "<group>"; };
-		50FFDD071B2E350B001E9583 /* FBAudienceNetwork.README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FBAudienceNetwork.README.txt; sourceTree = "<group>"; };
-		50FFDD081B2E350B001E9583 /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKMessengerShareKit.framework; sourceTree = "<group>"; };
-		50FFDD091B2E350B001E9583 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
+		50FFDD031B2E350B001E9583 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = OnTheMap/Bolts.framework; sourceTree = "<group>"; };
+		50FFDD041B2E350B001E9583 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = OnTheMap/FacebookSDK.framework; sourceTree = "<group>"; };
+		50FFDD051B2E350B001E9583 /* FacebookSDK.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = FacebookSDK.strings; path = OnTheMap/FacebookSDK.strings; sourceTree = "<group>"; };
+		50FFDD061B2E350B001E9583 /* FBAudienceNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBAudienceNetwork.framework; path = OnTheMap/FBAudienceNetwork.framework; sourceTree = "<group>"; };
+		50FFDD071B2E350B001E9583 /* FBAudienceNetwork.README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = FBAudienceNetwork.README.txt; path = OnTheMap/FBAudienceNetwork.README.txt; sourceTree = "<group>"; };
+		50FFDD081B2E350B001E9583 /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKMessengerShareKit.framework; path = OnTheMap/FBSDKMessengerShareKit.framework; sourceTree = "<group>"; };
+		50FFDD091B2E350B001E9583 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = OnTheMap/FBSDKShareKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
